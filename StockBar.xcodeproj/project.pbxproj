@@ -1,0 +1,352 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1919BC0C249EAEF000D708F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC0B249EAEF000D708F4 /* AppDelegate.swift */; };
+		1919BC10249EAEF100D708F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1919BC0F249EAEF100D708F4 /* Assets.xcassets */; };
+		1919BC13249EAEF100D708F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1919BC11249EAEF100D708F4 /* Main.storyboard */; };
+		1919BC22249EB09500D708F4 /* TickerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC1B249EB09500D708F4 /* TickerMenu.swift */; };
+		1919BC23249EB09500D708F4 /* PreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC1C249EB09500D708F4 /* PreferenceViewController.swift */; };
+		1919BC24249EB09500D708F4 /* PreferencePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC1D249EB09500D708F4 /* PreferencePopover.swift */; };
+		1919BC25249EB09500D708F4 /* StockStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC1E249EB09500D708F4 /* StockStatusBar.swift */; };
+		1919BC26249EB09500D708F4 /* StockMenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC1F249EB09500D708F4 /* StockMenuBarController.swift */; };
+		1919BC27249EB09500D708F4 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC20249EB09500D708F4 /* Preferences.swift */; };
+		1919BC28249EB09500D708F4 /* YahooFinanceDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1919BC08249EAEF000D708F4 /* StockBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1919BC0B249EAEF000D708F4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1919BC0F249EAEF100D708F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1919BC12249EAEF100D708F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1919BC14249EAEF100D708F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1919BC15249EAEF100D708F4 /* StockBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StockBar.entitlements; sourceTree = "<group>"; };
+		1919BC1B249EB09500D708F4 /* TickerMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TickerMenu.swift; sourceTree = "<group>"; };
+		1919BC1C249EB09500D708F4 /* PreferenceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceViewController.swift; sourceTree = "<group>"; };
+		1919BC1D249EB09500D708F4 /* PreferencePopover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencePopover.swift; sourceTree = "<group>"; };
+		1919BC1E249EB09500D708F4 /* StockStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockStatusBar.swift; sourceTree = "<group>"; };
+		1919BC1F249EB09500D708F4 /* StockMenuBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockMenuBarController.swift; sourceTree = "<group>"; };
+		1919BC20249EB09500D708F4 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YahooFinanceDecoder.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1919BC05249EAEF000D708F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1919BBFF249EAEF000D708F4 = {
+			isa = PBXGroup;
+			children = (
+				1919BC0A249EAEF000D708F4 /* StockBar */,
+				1919BC09249EAEF000D708F4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1919BC09249EAEF000D708F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1919BC08249EAEF000D708F4 /* StockBar.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1919BC0A249EAEF000D708F4 /* StockBar */ = {
+			isa = PBXGroup;
+			children = (
+				1919BC0B249EAEF000D708F4 /* AppDelegate.swift */,
+				1919BC1D249EB09500D708F4 /* PreferencePopover.swift */,
+				1919BC20249EB09500D708F4 /* Preferences.swift */,
+				1919BC1C249EB09500D708F4 /* PreferenceViewController.swift */,
+				1919BC1F249EB09500D708F4 /* StockMenuBarController.swift */,
+				1919BC1E249EB09500D708F4 /* StockStatusBar.swift */,
+				1919BC1B249EB09500D708F4 /* TickerMenu.swift */,
+				1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */,
+				1919BC0F249EAEF100D708F4 /* Assets.xcassets */,
+				1919BC11249EAEF100D708F4 /* Main.storyboard */,
+				1919BC14249EAEF100D708F4 /* Info.plist */,
+				1919BC15249EAEF100D708F4 /* StockBar.entitlements */,
+			);
+			path = StockBar;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1919BC07249EAEF000D708F4 /* StockBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1919BC18249EAEF100D708F4 /* Build configuration list for PBXNativeTarget "StockBar" */;
+			buildPhases = (
+				1919BC04249EAEF000D708F4 /* Sources */,
+				1919BC05249EAEF000D708F4 /* Frameworks */,
+				1919BC06249EAEF000D708F4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StockBar;
+			productName = StockBar;
+			productReference = 1919BC08249EAEF000D708F4 /* StockBar.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1919BC00249EAEF000D708F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1150;
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "Hongliang Fan";
+				TargetAttributes = {
+					1919BC07249EAEF000D708F4 = {
+						CreatedOnToolsVersion = 11.5;
+					};
+				};
+			};
+			buildConfigurationList = 1919BC03249EAEF000D708F4 /* Build configuration list for PBXProject "StockBar" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1919BBFF249EAEF000D708F4;
+			productRefGroup = 1919BC09249EAEF000D708F4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1919BC07249EAEF000D708F4 /* StockBar */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1919BC06249EAEF000D708F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1919BC10249EAEF100D708F4 /* Assets.xcassets in Resources */,
+				1919BC13249EAEF100D708F4 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1919BC04249EAEF000D708F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1919BC26249EB09500D708F4 /* StockMenuBarController.swift in Sources */,
+				1919BC24249EB09500D708F4 /* PreferencePopover.swift in Sources */,
+				1919BC28249EB09500D708F4 /* YahooFinanceDecoder.swift in Sources */,
+				1919BC25249EB09500D708F4 /* StockStatusBar.swift in Sources */,
+				1919BC22249EB09500D708F4 /* TickerMenu.swift in Sources */,
+				1919BC0C249EAEF000D708F4 /* AppDelegate.swift in Sources */,
+				1919BC27249EB09500D708F4 /* Preferences.swift in Sources */,
+				1919BC23249EB09500D708F4 /* PreferenceViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1919BC11249EAEF100D708F4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1919BC12249EAEF100D708F4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1919BC16249EAEF100D708F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1919BC17249EAEF100D708F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		1919BC19249EAEF100D708F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = StockBar/StockBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = StockBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.fhl43211.StockBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1919BC1A249EAEF100D708F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = StockBar/StockBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = StockBar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.fhl43211.StockBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1919BC03249EAEF000D708F4 /* Build configuration list for PBXProject "StockBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1919BC16249EAEF100D708F4 /* Debug */,
+				1919BC17249EAEF100D708F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1919BC18249EAEF100D708F4 /* Build configuration list for PBXNativeTarget "StockBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1919BC19249EAEF100D708F4 /* Debug */,
+				1919BC1A249EAEF100D708F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1919BC00249EAEF000D708F4 /* Project object */;
+}
