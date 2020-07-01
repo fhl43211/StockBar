@@ -5,7 +5,6 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Foundation
-import Combine
 import Cocoa
 
 
@@ -16,7 +15,7 @@ class StockMenuBarController {
         setupPrefsObservers()
         self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(fetchAllQuote),                                                                              userInfo: nil, repeats: true)
     }
-    private var cancellable: AnyCancellable?
+
     private let statusBar = StockStatusBar()
     private lazy var prefs = Preferences()
     private lazy var timer = Timer()
@@ -41,7 +40,8 @@ extension StockMenuBarController {
         }
         fetchAllQuote()
     }
-    private func fetchQuoteAndUpdateItem(item: NSStatusItem?) {
+    private func fetchQuoteAndUpdateItem(itemController: StockStatusItemController?) {
+        let item = itemController?.item
         if (item == nil) {
             return
         }
@@ -58,7 +58,7 @@ extension StockMenuBarController {
                                     decoder: JSONDecoder()
                                 )
                                 .receive(on: DispatchQueue.main)
-        cancellable = tickerPublisher.sink(
+        itemController?.cancellable = tickerPublisher.sink(
             receiveCompletion: { _ in
             },
             receiveValue: { overview in
@@ -86,44 +86,11 @@ extension StockMenuBarController {
                 }
             }
         )
-//        let fetchStockQuote = URLSession.shared.dataTask(with: url) { ( data, response, error ) in
-//            let jsonDecoder = JSONDecoder()
-//            // TODO(HF) error not handled
-//            if let data = data, let overview = try?jsonDecoder.decode(Overview.self, from: data) {
-//                DispatchQueue.main.async {
-//                    let chart = overview.chart;
-//                    if let msg = chart.error {
-//                        // Error occured
-//                        if let errorMenu = item!.menu as? TickerErrorMenu {
-//                            errorMenu.updateErrorMenu(error: msg)
-//                        }
-//                        else {
-//                            button!.title = button!.alternateTitle
-//                            item!.menu = TickerErrorMenu(errorMsg: msg.errorDescription)
-//                        }
-//                    }
-//                    else if let results = chart.result {
-//                        let metaInfo = results[0].meta
-//                        button!.title = metaInfo.symbol + metaInfo.getChange()
-//                        if let tickerMenu = item!.menu as? TickerMenu {
-//                            tickerMenu.updateTickerMenu(metaInfo: metaInfo)
-//                        }
-//                        else {
-//                            item!.menu = TickerMenu(metaInfo: metaInfo)
-//                        }
-//
-//                    }
-//                }
-//            }
-//            else {
-//            }
-//        }
-//        fetchStockQuote.resume()
     }
 
     @objc private func fetchAllQuote() {
         for tickerItem in self.statusBar.tickerItems() {
-            fetchQuoteAndUpdateItem(item: tickerItem)
+            fetchQuoteAndUpdateItem(itemController: tickerItem)
         }
     }
     @objc private func quitApp() {
