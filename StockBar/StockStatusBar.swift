@@ -5,6 +5,7 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Foundation
+import Combine
 import Cocoa
 
 class StockStatusBar: NSStatusBar {
@@ -24,17 +25,23 @@ class StockStatusBar: NSStatusBar {
         tickerStatusItems = []
     }
     func constructTickerItems(tickerId : String) {
-        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.title = tickerId
-        item.button?.alternateTitle = tickerId
-        tickerStatusItems.append(item)
+        tickerStatusItems.append(StockStatusItemController(tickerId: tickerId))
     }
-    func tickerItems() -> [NSStatusItem] {
+    func tickerItems() -> [StockStatusItemController] {
         return tickerStatusItems
     }
     func mainItem() -> NSStatusItem? {
         return mainStatusItem
     }
     private var mainStatusItem : NSStatusItem?
-    private var tickerStatusItems : [NSStatusItem] = []
+    private var tickerStatusItems : [StockStatusItemController] = []
+}
+
+class StockStatusItemController {
+    init(tickerId : String) {
+        item.button?.title = tickerId
+        item.button?.alternateTitle = tickerId
+    }
+    var item: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    var cancellable: AnyCancellable?
 }

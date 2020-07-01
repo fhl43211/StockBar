@@ -15,6 +15,7 @@ class StockMenuBarController {
         setupPrefsObservers()
         self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(fetchAllQuote),                                                                              userInfo: nil, repeats: true)
     }
+
     private let statusBar = StockStatusBar()
     private lazy var prefs = Preferences()
     private lazy var timer = Timer()
@@ -39,7 +40,8 @@ extension StockMenuBarController {
         }
         fetchAllQuote()
     }
-    private func fetchQuoteAndUpdateItem(item: NSStatusItem?) {
+    private func fetchQuoteAndUpdateItem(itemController: StockStatusItemController?) {
+        let item = itemController?.item
         if (item == nil) {
             return
         }
@@ -49,44 +51,46 @@ extension StockMenuBarController {
         let button = item!.button
         let tickerId = button!.alternateTitle
         let url = URL( string: ("https://query1.finance.yahoo.com/v8/finance/chart/" + tickerId + "?interval=1d") )!
-        let fetchStockQuote = URLSession.shared.dataTask(with: url) { ( data, response, error ) in
-            let jsonDecoder = JSONDecoder()
-            // TODO(HF) error not handled
-            if let data = data, let overview = try?jsonDecoder.decode(Overview.self, from: data) {
-                DispatchQueue.main.async {
-                    let chart = overview.chart;
-                    if let msg = chart.error {
-                        // Error occured
-                        if let errorMenu = item!.menu as? TickerErrorMenu {
-                            errorMenu.updateErrorMenu(error: msg)
-                        }
-                        else {
-                            button!.title = button!.alternateTitle
-                            item!.menu = TickerErrorMenu(errorMsg: msg.errorDescription)
-                        }
+        let tickerPublisher = URLSession.shared.dataTaskPublisher(for: url)
+                                .map(\.data)
+                                .decode(
+                                    type: Overview.self,
+                                    decoder: JSONDecoder()
+                                )
+                                .receive(on: DispatchQueue.main)
+        itemController?.cancellable = tickerPublisher.sink(
+            receiveCompletion: { _ in
+            },
+            receiveValue: { overview in
+                let chart = overview.chart;
+                if let msg = chart.error {
+                    // Error occured
+                    if let errorMenu = item!.menu as? TickerErrorMenu {
+                        errorMenu.updateErrorMenu(error: msg)
                     }
-                    else if let results = chart.result {
-                        let metaInfo = results[0].meta
-                        button!.title = metaInfo.symbol + metaInfo.getChange()
-                        if let tickerMenu = item!.menu as? TickerMenu {
-                            tickerMenu.updateTickerMenu(metaInfo: metaInfo)
-                        }
-                        else {
-                            item!.menu = TickerMenu(metaInfo: metaInfo)
-                        }
-                        
+                    else {
+                        button!.title = button!.alternateTitle
+                        item!.menu = TickerErrorMenu(errorMsg: msg.errorDescription)
                     }
                 }
+                else if let results = chart.result {
+                    let metaInfo = results[0].meta
+                    button!.title = metaInfo.symbol + metaInfo.getChange()
+                    if let tickerMenu = item!.menu as? TickerMenu {
+                        tickerMenu.updateTickerMenu(metaInfo: metaInfo)
+                    }
+                    else {
+                        item!.menu = TickerMenu(metaInfo: metaInfo)
+                    }
+                    
+                }
             }
-            else {
-            }
-        }
-        fetchStockQuote.resume()
+        )
     }
 
     @objc private func fetchAllQuote() {
         for tickerItem in self.statusBar.tickerItems() {
-            fetchQuoteAndUpdateItem(item: tickerItem)
+            fetchQuoteAndUpdateItem(itemController: tickerItem)
         }
     }
     @objc private func quitApp() {
