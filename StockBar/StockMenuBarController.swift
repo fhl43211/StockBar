@@ -5,6 +5,7 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Foundation
+import Combine
 import Cocoa
 
 
@@ -15,7 +16,7 @@ class StockMenuBarController {
         setupPrefsObservers()
         self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(fetchAllQuote),                                                                              userInfo: nil, repeats: true)
     }
-
+    private var cancellables : [AnyCancellable] = []
     private let statusBar = StockStatusBar()
     private lazy var prefs = Preferences()
     private lazy var timer = Timer()
@@ -89,9 +90,11 @@ extension StockMenuBarController {
     }
 
     @objc private func fetchAllQuote() {
+        let userData = UserData.sharedInstance
         for tickerItem in self.statusBar.tickerItems() {
             fetchQuoteAndUpdateItem(itemController: tickerItem)
         }
+
     }
     @objc private func quitApp() {
         NSApp.terminate(self)

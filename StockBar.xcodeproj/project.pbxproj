@@ -17,6 +17,9 @@
 		1919BC26249EB09500D708F4 /* StockMenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC1F249EB09500D708F4 /* StockMenuBarController.swift */; };
 		1919BC27249EB09500D708F4 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC20249EB09500D708F4 /* Preferences.swift */; };
 		1919BC28249EB09500D708F4 /* YahooFinanceDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */; };
+		1938789724D647C8009FA349 /* Trade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938789624D647C8009FA349 /* Trade.swift */; };
+		19E9000724D73BC600D4D818 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9000624D73BC600D4D818 /* UserData.swift */; };
+		19E9000924D776C400D4D818 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9000824D776C400D4D818 /* PreferenceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,9 @@
 		1919BC1F249EB09500D708F4 /* StockMenuBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockMenuBarController.swift; sourceTree = "<group>"; };
 		1919BC20249EB09500D708F4 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YahooFinanceDecoder.swift; sourceTree = "<group>"; };
+		1938789624D647C8009FA349 /* Trade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trade.swift; sourceTree = "<group>"; };
+		19E9000624D73BC600D4D818 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		19E9000824D776C400D4D818 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +71,7 @@
 		1919BC0A249EAEF000D708F4 /* StockBar */ = {
 			isa = PBXGroup;
 			children = (
+				1938789524D647B0009FA349 /* Data */,
 				1919BC0B249EAEF000D708F4 /* AppDelegate.swift */,
 				1919BC1D249EB09500D708F4 /* PreferencePopover.swift */,
 				1919BC20249EB09500D708F4 /* Preferences.swift */,
@@ -77,8 +84,18 @@
 				1919BC11249EAEF100D708F4 /* Main.storyboard */,
 				1919BC14249EAEF100D708F4 /* Info.plist */,
 				1919BC15249EAEF100D708F4 /* StockBar.entitlements */,
+				19E9000824D776C400D4D818 /* PreferenceView.swift */,
 			);
 			path = StockBar;
+			sourceTree = "<group>";
+		};
+		1938789524D647B0009FA349 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				1938789624D647C8009FA349 /* Trade.swift */,
+				19E9000624D73BC600D4D818 /* UserData.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,9 +173,12 @@
 				1919BC28249EB09500D708F4 /* YahooFinanceDecoder.swift in Sources */,
 				1919BC25249EB09500D708F4 /* StockStatusBar.swift in Sources */,
 				1919BC22249EB09500D708F4 /* TickerMenu.swift in Sources */,
+				1938789724D647C8009FA349 /* Trade.swift in Sources */,
 				1919BC0C249EAEF000D708F4 /* AppDelegate.swift in Sources */,
 				1919BC27249EB09500D708F4 /* Preferences.swift in Sources */,
+				19E9000724D73BC600D4D818 /* UserData.swift in Sources */,
 				1919BC23249EB09500D708F4 /* PreferenceViewController.swift in Sources */,
+				19E9000924D776C400D4D818 /* PreferenceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

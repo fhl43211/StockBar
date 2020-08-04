@@ -5,7 +5,33 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Cocoa
+import Combine
+import SwiftUI
+class PreferenceHostingController : NSHostingController<PreferenceView> {
+    init() {
+        super.init(rootView: PreferenceView(userdata: UserData.sharedInstance))
+    }
+    @objc required dynamic init?(coder: NSCoder) {
+        super.init(coder: coder, rootView: PreferenceView(userdata: UserData.sharedInstance))
+    }
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        saveNewPrefs()
+    }
+    var cancellable : AnyCancellable? = nil
+    func saveNewPrefs() {
+        cancellable = UserData.sharedInstance.$realTimeTrades
+            .removeDuplicates(by: { oldValue, newValue in
+                oldValue.map {$0.trade} == newValue.map { $0.trade }
+            }).eraseToAnyPublisher()
+            .sink {
+                let encodedData : Data = try! JSONEncoder().encode($0.map { ($0.trade) })
+                UserDefaults.standard.set( encodedData, forKey: "usertrades")
+                
+        }
 
+    }
+}
 class PreferenceViewController: NSViewController {
 
     override func viewDidLoad() {
