@@ -27,7 +27,7 @@ class RealTimeTrade : ObservableObject {
             }
             .map(\.data)
             .compactMap { try? JSONDecoder().decode(Overview.self, from: $0) }
-            //.receive(on: RunLoop.main)
+            .receive(on: RunLoop.main)
             .sink (
                 receiveCompletion: { _ in
                     print ("HitCompletion")
@@ -50,10 +50,10 @@ class RealTimeTrade : ObservableObject {
 
 // This is a single source of truth during the running of this app.
 // It loads from the UserDefaults at startup and all the user input goes here. It then updates the UserDefaults
-class UserData : ObservableObject {
+class UserData {
     static let sharedInstance = UserData()
     let decoder = JSONDecoder()
-    @Published var realTimeTrades : [RealTimeTrade]
+    var realTimeTrades : [RealTimeTrade]
     init() {
         let data = UserDefaults.standard.object(forKey: "usertrades") as? Data ?? Data()
         self.realTimeTrades = ((try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 3)).map {
