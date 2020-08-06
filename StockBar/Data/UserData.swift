@@ -10,7 +10,11 @@ import Foundation
 import Combine
 
 class RealTimeTrade : ObservableObject {
-    @Published var trade : Trade
+    var trade : Trade {
+        willSet {
+            objectWillChange.send()
+        }
+    }
     var currentValuePublisher : CurrentValueSubject<Trade, Never>
     @Published var realTimeInfo : TradingInfo
     func sendTradeToPublisher() {
