@@ -10,21 +10,23 @@ import Foundation
 import Combine
 
 class RealTimeTrade : ObservableObject {
-    var trade : Trade {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-    var currentValuePublisher : CurrentValueSubject<Trade, Never>
+    @Published var trade : Trade
+    private let passThroughTrade : PassthroughSubject<Trade, Never> = PassthroughSubject()
+    var sharedPassThroughTrade: Publishers.Share<PassthroughSubject<Trade, Never>>
     @Published var realTimeInfo : TradingInfo
     func sendTradeToPublisher() {
-        currentValuePublisher.send(trade)
+        passThroughTrade.send(trade)
     }
     init(trade: Trade, realTimeInfo: TradingInfo) {
         self.trade = trade
         self.realTimeInfo = realTimeInfo
-        self.currentValuePublisher = CurrentValueSubject<Trade, Never>(trade)
-        self.cancellable = currentValuePublisher
+        self.sharedPassThroughTrade = self.passThroughTrade.share()
+        self.cancellable = sharedPassThroughTrade
+            .merge(with: $trade.share()
+                .debounce(for: .seconds(1), scheduler: RunLoop.main)
+                .removeDuplicates {
+                    $0.name == $1.name
+            })
             //.debounce(for: .seconds(1), scheduler: RunLoop.main)
 //            .removeDuplicates {
 //                $0.name == $1.name

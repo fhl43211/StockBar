@@ -42,8 +42,14 @@ class StockStatusItemController {
     init(realTimeTrade : RealTimeTrade) {
         item.button?.title = realTimeTrade.trade.name
         item.button?.alternateTitle = realTimeTrade.trade.name
-        cancellable = Publishers.Zip(realTimeTrade.currentValuePublisher, realTimeTrade.$realTimeInfo)
-            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+        cancellable = Publishers.CombineLatest(realTimeTrade.sharedPassThroughTrade
+            .merge(with: realTimeTrade.$trade.share()
+            //.debounce(for: .seconds(1), scheduler: RunLoop.main)
+//            .removeDuplicates {
+//                $0.name == $1.name
+//        }
+        ), realTimeTrade.$realTimeInfo)
+            //.debounce(for: .seconds(0.1), scheduler: RunLoop.main)
             .receive(on: RunLoop.main)
             .sink { (trade, trading) in
             self.item.button?.title = trade.name + trading.getChange()
