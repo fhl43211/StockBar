@@ -18,7 +18,9 @@ class StockMenuBarController {
     }
     private var cancellables : [AnyCancellable] = []
     private let statusBar = StockStatusBar()
-    private lazy var prefs = Preferences()
+
+    private let userData = UserData.sharedInstance
+    //private lazy var prefs = Preferences()
     private lazy var timer = Timer()
     private lazy var prefPopover = PreferencePopover()
     private lazy var mainMenuItems = [NSMenuItem(title: "Refresh", action: #selector(fetchAllQuote), keyEquivalent: ""),
@@ -36,65 +38,66 @@ extension StockMenuBarController {
     }
     private func updateTickerItemsFromPrefs() {
         statusBar.removeAllTickerItems()
-        for id in prefs.nonEmptyTickers() {
-            statusBar.constructTickerItems(tickerId: id)
+        for iter in (0..<userData.realTimeTrades.count) {
+            statusBar.constructTickerItems(realTimeTrade: userData.realTimeTrades[iter])
         }
+//        for id in prefs.nonEmptyTickers() {
+//            statusBar.constructTickerItems(tickerId: id)
+//        }
         fetchAllQuote()
     }
     private func fetchQuoteAndUpdateItem(itemController: StockStatusItemController?) {
-        let item = itemController?.item
-        if (item == nil) {
-            return
-        }
-        if (item!.button == nil) {
-            return
-        }
-        let button = item!.button
-        let tickerId = button!.alternateTitle
-        let url = URL( string: ("https://query1.finance.yahoo.com/v8/finance/chart/" + tickerId + "?interval=1d") )!
-        let tickerPublisher = URLSession.shared.dataTaskPublisher(for: url)
-                                .map(\.data)
-                                .decode(
-                                    type: Overview.self,
-                                    decoder: JSONDecoder()
-                                )
-                                .receive(on: DispatchQueue.main)
-        itemController?.cancellable = tickerPublisher.sink(
-            receiveCompletion: { _ in
-            },
-            receiveValue: { overview in
-                let chart = overview.chart;
-                if let msg = chart.error {
-                    // Error occured
-                    if let errorMenu = item!.menu as? TickerErrorMenu {
-                        errorMenu.updateErrorMenu(error: msg)
-                    }
-                    else {
-                        button!.title = button!.alternateTitle
-                        item!.menu = TickerErrorMenu(errorMsg: msg.errorDescription)
-                    }
-                }
-                else if let results = chart.result {
-                    let metaInfo = results[0].meta
-                    button!.title = metaInfo.symbol + metaInfo.getChange()
-                    if let tickerMenu = item!.menu as? TickerMenu {
-                        tickerMenu.updateTickerMenu(metaInfo: metaInfo)
-                    }
-                    else {
-                        item!.menu = TickerMenu(metaInfo: metaInfo)
-                    }
-                    
-                }
-            }
-        )
+//        let item = itemController?.item
+//        if (item == nil) {
+//            return
+//        }
+//        if (item!.button == nil) {
+//            return
+//        }
+//        let button = item!.button
+//        let tickerId = button!.alternateTitle
+//        let url = URL( string: ("https://query1.finance.yahoo.com/v8/finance/chart/" + tickerId + "?interval=1d") )!
+//        let tickerPublisher = URLSession.shared.dataTaskPublisher(for: url)
+//                                .map(\.data)
+//                                .decode(
+//                                    type: Overview.self,
+//                                    decoder: JSONDecoder()
+//                                )
+//                                .receive(on: DispatchQueue.main)
+//        itemController?.cancellable = tickerPublisher.sink(
+//            receiveCompletion: { _ in
+//            },
+//            receiveValue: { overview in
+//                let chart = overview.chart;
+//                if let msg = chart.error {
+//                    // Error occured
+//                    if let errorMenu = item!.menu as? TickerErrorMenu {
+//                        errorMenu.updateErrorMenu(error: msg)
+//                    }
+//                    else {
+//                        button!.title = button!.alternateTitle
+//                        item!.menu = TickerErrorMenu(errorMsg: msg.errorDescription)
+//                    }
+//                }
+//                else if let results = chart.result {
+//                    let metaInfo = results[0].meta
+//                    button!.title = metaInfo.symbol + metaInfo.getChange()
+//                    if let tickerMenu = item!.menu as? TickerMenu {
+//                        tickerMenu.updateTickerMenu(metaInfo: metaInfo)
+//                    }
+//                    else {
+//                        item!.menu = TickerMenu(metaInfo: metaInfo)
+//                    }
+//
+//                }
+//            }
+//        )
     }
 
     @objc private func fetchAllQuote() {
-        let userData = UserData.sharedInstance
-        for tickerItem in self.statusBar.tickerItems() {
-            fetchQuoteAndUpdateItem(itemController: tickerItem)
+        for realTimeTrade in self.userData.realTimeTrades {
+            realTimeTrade.sendTradeToPublisher()
         }
-
     }
     @objc private func quitApp() {
         NSApp.terminate(self)

@@ -5,14 +5,30 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Cocoa
+func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    let unitSize = Double(position.unitSize) ?? 0
+    let pnl = (tradingInfo.currentPrice - tradingInfo.prevClosePrice)*unitSize
+    let pnlString = String(format: "%.2f", pnl)
+    return "DailyPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
+}
+fileprivate func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    let unitSize = Double(position.unitSize) ?? 0
+    let avgCost = Double(position.positionAvgCost) ?? 0
+    let pnl = (tradingInfo.currentPrice - avgCost)*unitSize
+    let pnlString = String(format: "%.2f", pnl)
+    return "TotalPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
+}
 
 final class TickerMenu: NSMenu {
-    init(metaInfo: Meta) {
+    init(tradingInfo: TradingInfo, position: Position) {
         super.init(title: String())
-        self.addItem(withTitle: metaInfo.getPrice(), action: nil, keyEquivalent: "")
-        self.addItem(withTitle: metaInfo.getChangePct(), action: nil, keyEquivalent: "")
-        self.addItem(withTitle: metaInfo.getLongChange(), action: nil, keyEquivalent: "")
-        self.addItem(withTitle: metaInfo.getTimeInfo(), action: nil, keyEquivalent: "")
+        self.addItem(withTitle: tradingInfo.getPrice(), action: nil, keyEquivalent: "")
+        self.addItem(withTitle: tradingInfo.getChangePct(), action: nil, keyEquivalent: "")
+        self.addItem(withTitle: tradingInfo.getLongChange(), action: nil, keyEquivalent: "")
+        self.addItem(withTitle: tradingInfo.getTimeInfo(), action: nil, keyEquivalent: "")
+        self.addItem(NSMenuItem.separator())
+        self.addItem(withTitle: dailyPNL(tradingInfo, position), action: nil, keyEquivalent: "")
+        self.addItem(withTitle: totalPNL(tradingInfo, position), action: nil, keyEquivalent: "")
     }
     
     required init(coder: NSCoder) {

@@ -11,14 +11,22 @@ import Combine
 
 class RealTimeTrade : ObservableObject {
     @Published var trade : Trade
+    var currentValuePublisher : CurrentValueSubject<Trade, Never>
     @Published var realTimeInfo : TradingInfo
+    func sendTradeToPublisher() {
+        currentValuePublisher.send(trade)
+    }
     init(trade: Trade, realTimeInfo: TradingInfo) {
         self.trade = trade
         self.realTimeInfo = realTimeInfo
-        self.cancellable = $trade
-            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-            .removeDuplicates {
-                $0.name == $1.name
+        self.currentValuePublisher = CurrentValueSubject<Trade, Never>(trade)
+        self.cancellable = currentValuePublisher
+            //.debounce(for: .seconds(1), scheduler: RunLoop.main)
+//            .removeDuplicates {
+//                $0.name == $1.name
+//            }
+            .filter {
+                $0.name != ""
             }
             .setFailureType(to: URLSession.DataTaskPublisher.Failure.self)
             .flatMap { singleTrade in
@@ -39,7 +47,12 @@ class RealTimeTrade : ObservableObject {
                         print ("\(msg)")
                     }
                     else if let results = chart.result {
-                        self.realTimeInfo.currentPrice = results[0].meta.regularMarketPrice
+                        let newRealTimeInfo = TradingInfo(currentPrice: results[0].meta.regularMarketPrice,
+                                                          prevClosePrice: results[0].meta.chartPreviousClose,
+                                                          currency: results[0].meta.currency,
+                                                          regularMarketTime: results[0].meta.regularMarketTime,
+                                                          exchangeTimezoneName: results[0].meta.exchangeTimezoneName)
+                        self.realTimeInfo = newRealTimeInfo
                     }
                 }
             )

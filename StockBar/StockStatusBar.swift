@@ -9,6 +9,7 @@ import Combine
 import Cocoa
 
 class StockStatusBar: NSStatusBar {
+    let userdata = UserData.sharedInstance
     override init() {
         super.init()
         mainStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -24,8 +25,8 @@ class StockStatusBar: NSStatusBar {
     func removeAllTickerItems() {
         tickerStatusItems = []
     }
-    func constructTickerItems(tickerId : String) {
-        tickerStatusItems.append(StockStatusItemController(tickerId: tickerId))
+    func constructTickerItems(realTimeTrade : RealTimeTrade) {
+        tickerStatusItems.append(StockStatusItemController(realTimeTrade: realTimeTrade))
     }
     func tickerItems() -> [StockStatusItemController] {
         return tickerStatusItems
@@ -38,9 +39,17 @@ class StockStatusBar: NSStatusBar {
 }
 
 class StockStatusItemController {
-    init(tickerId : String) {
-        item.button?.title = tickerId
-        item.button?.alternateTitle = tickerId
+    init(realTimeTrade : RealTimeTrade) {
+        item.button?.title = realTimeTrade.trade.name
+        item.button?.alternateTitle = realTimeTrade.trade.name
+        cancellable = Publishers.Zip(realTimeTrade.currentValuePublisher, realTimeTrade.$realTimeInfo)
+            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+            .receive(on: RunLoop.main)
+            .sink { (trade, trading) in
+            self.item.button?.title = trade.name + trading.getChange()
+            self.item.button?.alternateTitle = trade.name
+            self.item.menu = TickerMenu(tradingInfo: trading, position: trade.position)
+        }
     }
     var item: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     var cancellable: AnyCancellable?

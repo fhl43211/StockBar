@@ -24,7 +24,9 @@ class PreferenceHostingController : NSHostingController<PreferenceView> {
         }
         let encodedData : Data = try! JSONEncoder().encode(trades)
         UserDefaults.standard.set( encodedData, forKey: "usertrades")
-
+        for iter in (0..<UserData.sharedInstance.realTimeTrades.count) {
+            UserData.sharedInstance.realTimeTrades[iter].sendTradeToPublisher()
+        }
     }
 }
 class PreferenceViewController: NSViewController {
