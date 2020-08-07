@@ -29,19 +29,3 @@ class PreferenceHostingController : NSHostingController<PreferenceView> {
 //        }
     }
 }
-class PreferenceViewController: NSViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
-    }
-    
-    private var prefs = Preferences()
-    
-    @IBOutlet weak var tickerBox0: NSTextField!
-    @IBOutlet weak var tickerBox1: NSTextField!
-    @IBOutlet weak var tickerBox2: NSTextField!
-    @IBOutlet weak var tickerBox3: NSTextField!
-    @IBOutlet weak var tickerBox4: NSTextField!
-    
-}
