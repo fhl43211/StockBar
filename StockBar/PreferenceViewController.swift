@@ -9,10 +9,10 @@ import Combine
 import SwiftUI
 class PreferenceHostingController : NSHostingController<PreferenceView> {
     init() {
-        super.init(rootView: PreferenceView())
+        super.init(rootView: PreferenceView(userdata: UserData.sharedInstance))
     }
     @objc required dynamic init?(coder: NSCoder) {
-        super.init(coder: coder, rootView: PreferenceView())
+        super.init(coder: coder, rootView: PreferenceView(userdata: UserData.sharedInstance))
     }
     override func viewWillDisappear() {
         super.viewWillDisappear()

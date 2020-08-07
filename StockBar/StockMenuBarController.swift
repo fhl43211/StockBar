@@ -12,8 +12,18 @@ import Cocoa
 class StockMenuBarController {
     init () {
         constructMainItem()
-        updateTickerItemsFromPrefs()
+        //updateTickerItemsFromPrefs()
         self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(fetchAllQuote),                                                                              userInfo: nil, repeats: true)
+        self.cancellables = self.userData.$realTimeTrades
+//            .map { trades in
+//                trades.count
+//            }
+            //.debounce(for: .seconds(1), scheduler: RunLoop.main)
+            //.removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { receiveValue in
+                self.updateTickerItemsFromPrefs()
+        }
     }
     private var cancellables : AnyCancellable?
     private let statusBar = StockStatusBar()

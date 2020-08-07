@@ -9,7 +9,8 @@
 import Foundation
 import Combine
 
-class RealTimeTrade : ObservableObject {
+class RealTimeTrade : ObservableObject, Identifiable {
+    let id = UUID()
     @Published var trade : Trade
     private let passThroughTrade : PassthroughSubject<Trade, Never> = PassthroughSubject()
     var sharedPassThroughTrade: Publishers.Share<PassthroughSubject<Trade, Never>>
@@ -69,10 +70,10 @@ class RealTimeTrade : ObservableObject {
 
 // This is a single source of truth during the running of this app.
 // It loads from the UserDefaults at startup and all the user input goes here. It then updates the UserDefaults
-class UserData {
+class UserData : ObservableObject{
     static let sharedInstance = UserData()
     let decoder = JSONDecoder()
-    var realTimeTrades : [RealTimeTrade]
+    @Published var realTimeTrades : [RealTimeTrade]
     init() {
         let data = UserDefaults.standard.object(forKey: "usertrades") as? Data ?? Data()
         self.realTimeTrades = ((try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 3)).map {

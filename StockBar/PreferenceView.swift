@@ -23,7 +23,7 @@ struct PreferenceRow : View {
 }
 
 struct PreferenceView: View {
-    let userdata : UserData = UserData.sharedInstance
+    @ObservedObject var userdata : UserData
     var size : Int {
         get {
             userdata.realTimeTrades.count
@@ -37,14 +37,35 @@ struct PreferenceView: View {
 //            Text("Average position cost")
 //            Spacer()
 //        }
-        ForEach(0..<size) { iter in
-            PreferenceRow(realTimeTrade: UserData.sharedInstance.realTimeTrades[iter])
+        ForEach(userdata.realTimeTrades) { item in
+            HStack {
+                Button(action: {
+                    if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
+                        self.userdata.realTimeTrades.remove(at: index)
+                    }
+                }){
+                    Text("-")
+                }
+                PreferenceRow(realTimeTrade: item)
+                Button(action: {
+                    let emptyTrade = RealTimeTrade(trade: Trade(name: "",
+                                                                position: Position(unitSize: "",
+                                                                                   positionAvgCost: "")),
+                                                   realTimeInfo: TradingInfo())
+                    if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
+                        self.userdata.realTimeTrades.insert(emptyTrade, at: index+1)
+                    }
+                }){
+                    Text("+")
+                }
+            }
+            
         }
     }
 }
 
 struct PreferenceView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferenceView()
+        PreferenceView(userdata: UserData.sharedInstance)
     }
 }

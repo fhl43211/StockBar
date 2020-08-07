@@ -23,6 +23,9 @@ class StockStatusBar: NSStatusBar {
         mainStatusItem?.menu = menu
     }
     func removeAllTickerItems() {
+        tickerStatusItems.forEach { controller in
+            controller.cancellable?.cancel()
+        }
         tickerStatusItems = []
     }
     func constructTickerItems(realTimeTrade : RealTimeTrade) {
