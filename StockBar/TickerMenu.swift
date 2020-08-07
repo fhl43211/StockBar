@@ -5,10 +5,12 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Cocoa
-func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
+func dailyPNLNumber(_ tradingInfo: TradingInfo, _ position: Position)->Double {
     let unitSize = Double(position.unitSize) ?? 0
-    let pnl = (tradingInfo.currentPrice - tradingInfo.prevClosePrice)*unitSize
-    let pnlString = String(format: "%.2f", pnl)
+    return (tradingInfo.currentPrice - tradingInfo.prevClosePrice)*unitSize
+}
+func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    let pnlString = String(format: "%.2f", dailyPNLNumber(tradingInfo, position))
     return "DailyPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
 }
 fileprivate func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
