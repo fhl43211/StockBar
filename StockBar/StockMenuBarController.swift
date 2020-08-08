@@ -21,8 +21,8 @@ class StockMenuBarController {
             //.debounce(for: .seconds(1), scheduler: RunLoop.main)
             //.removeDuplicates()
             .receive(on: RunLoop.main)
-            .sink { receiveValue in
-                self.updateTickerItemsFromPrefs()
+            .sink { [weak self] receiveValue in
+                self?.updateTickerItemsFromPrefs()
         }
     }
     private var cancellables : AnyCancellable?

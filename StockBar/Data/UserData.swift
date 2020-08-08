@@ -47,7 +47,7 @@ class RealTimeTrade : ObservableObject, Identifiable {
                 receiveCompletion: { _ in
                     print ("HitCompletion")
                 },
-                receiveValue: { overview in
+                receiveValue: { [weak self] overview in
                     let chart = overview.chart;
                     if let msg = chart.error {
                         // Error occured
@@ -59,7 +59,7 @@ class RealTimeTrade : ObservableObject, Identifiable {
                                                           currency: results[0].meta.currency,
                                                           regularMarketTime: results[0].meta.regularMarketTime,
                                                           exchangeTimezoneName: results[0].meta.exchangeTimezoneName)
-                        self.realTimeInfo = newRealTimeInfo
+                        self?.realTimeInfo = newRealTimeInfo
                     }
                 }
             )
@@ -83,5 +83,5 @@ class UserData : ObservableObject{
 }
 
 func emptyTrades(size : Int) -> [Trade]{
-    return [Trade].init(repeating: Trade(name: "", position: Position(unitSize: "", positionAvgCost: "")), count: size)
+    return [Trade].init(repeating: Trade(name: "", position: Position(unitSize: "1", positionAvgCost: "")), count: size)
 }

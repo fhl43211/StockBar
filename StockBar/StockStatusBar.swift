@@ -23,9 +23,9 @@ class StockStatusBar: NSStatusBar {
         mainStatusItem?.menu = menu
     }
     func removeAllTickerItems() {
-        tickerStatusItems.forEach { controller in
-            controller.cancellable?.cancel()
-        }
+//        tickerStatusItems.forEach { controller in
+//            controller.cancellable?.cancel()
+//        }
         tickerStatusItems = []
     }
     func constructTickerItems(realTimeTrade : RealTimeTrade) {
@@ -54,10 +54,10 @@ class StockStatusItemController {
         ), realTimeTrade.$realTimeInfo)
             //.debounce(for: .seconds(0.1), scheduler: RunLoop.main)
             .receive(on: RunLoop.main)
-            .sink { (trade, trading) in
-                self.item.button?.title = trade.name + " " + String(format: "%.2f", dailyPNLNumber(trading, trade.position))
-                self.item.button?.alternateTitle = trade.name
-                self.item.menu = TickerMenu(tradingInfo: trading, position: trade.position)
+            .sink { [weak self] (trade, trading) in
+                self?.item.button?.title = trade.name + String(format: "%+.2f", dailyPNLNumber(trading, trade.position))
+                self?.item.button?.alternateTitle = trade.name
+                self?.item.menu = TickerMenu(tradingInfo: trading, position: trade.position)
         }
     }
     var item: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
