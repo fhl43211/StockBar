@@ -37,30 +37,48 @@ struct PreferenceView: View {
 //            Text("Average position cost")
 //            Spacer()
 //        }
-        ForEach(userdata.realTimeTrades) { item in
+        VStack {
             HStack {
-                Button(action: {
-                    if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
-                        self.userdata.realTimeTrades.remove(at: index)
-                    }
-                }){
-                    Text("-")
-                }
-                PreferenceRow(realTimeTrade: item)
+                Spacer()
+                Text("Symbol")
+                Text("Unit")
+                Text("Avg position cost")
                 Button(action: {
                     let emptyTrade = RealTimeTrade(trade: Trade(name: "",
-                                                                position: Position(unitSize: "",
+                                                                position: Position(unitSize: "1",
                                                                                    positionAvgCost: "")),
                                                    realTimeInfo: TradingInfo())
-                    if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
-                        self.userdata.realTimeTrades.insert(emptyTrade, at: index+1)
+                    self.userdata.realTimeTrades.insert(emptyTrade, at: 0)
                     }
-                }){
+                ){
                     Text("+")
                 }
             }
-            
-        }
+            ForEach(userdata.realTimeTrades) { item in
+                HStack {
+                    Button(action: {
+                        if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
+                            self.userdata.realTimeTrades.remove(at: index)
+                        }
+                    }){
+                        Text("-")
+                    }
+                    PreferenceRow(realTimeTrade: item)
+                    Button(action: {
+                        let emptyTrade = RealTimeTrade(trade: Trade(name: "",
+                                                                    position: Position(unitSize: "1",
+                                                                                       positionAvgCost: "")),
+                                                       realTimeInfo: TradingInfo())
+                        if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
+                            self.userdata.realTimeTrades.insert(emptyTrade, at: index+1)
+                        }
+                    }){
+                        Text("+")
+                    }
+                }
+                
+            }
+        }.padding()
     }
 }
 
