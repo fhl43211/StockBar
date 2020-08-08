@@ -8,24 +8,24 @@ import Cocoa
 import Combine
 import SwiftUI
 class PreferenceHostingController : NSHostingController<PreferenceView> {
-    init() {
-        super.init(rootView: PreferenceView(userdata: UserData.sharedInstance))
+    private let data : DataModel
+    init(data: DataModel) {
+        self.data = data
+        super.init(rootView: PreferenceView(userdata: data))
     }
+    
     @objc required dynamic init?(coder: NSCoder) {
-        super.init(coder: coder, rootView: PreferenceView(userdata: UserData.sharedInstance))
+        fatalError("init(coder:) has not been implemented")
     }
     override func viewWillDisappear() {
         super.viewWillDisappear()
         saveNewPrefs()
     }
     func saveNewPrefs() {
-        let trades = UserData.sharedInstance.realTimeTrades.map {
+        let trades = data.realTimeTrades.map {
             $0.trade
         }
         let encodedData : Data = try! JSONEncoder().encode(trades)
         UserDefaults.standard.set( encodedData, forKey: "usertrades")
-//        for iter in (0..<UserData.sharedInstance.realTimeTrades.count) {
-//            UserData.sharedInstance.realTimeTrades[iter].sendTradeToPublisher()
-//        }
     }
 }

@@ -10,9 +10,9 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var statusBarController : StockMenuBarController?
-    private var userdata : UserData = .sharedInstance
+    private var userdata : DataModel = DataModel()
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        statusBarController = StockMenuBarController()
+        statusBarController = StockMenuBarController(data: userdata)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

@@ -16,27 +16,15 @@ struct PreferenceRow : View {
             TextField( "symbol", text: self.$realTimeTrade.trade.name )
             TextField( "unit size", text: self.$realTimeTrade.trade.position.unitSize )
             TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCost )
-            Text("\(self.realTimeTrade.realTimeInfo.currentPrice)")
             Spacer()
         }
     }
 }
 
 struct PreferenceView: View {
-    @ObservedObject var userdata : UserData
-    var size : Int {
-        get {
-            userdata.realTimeTrades.count
-        }
-    }
+    @ObservedObject var userdata : DataModel
+    
     var body: some View {
-//        Section {
-//            Spacer()
-//            Text("Symbol")
-//            Text("Unit")
-//            Text("Average position cost")
-//            Spacer()
-//        }
         VStack {
             HStack {
                 Spacer()
@@ -44,10 +32,7 @@ struct PreferenceView: View {
                 Text("Unit")
                 Text("Avg position cost")
                 Button(action: {
-                    let emptyTrade = RealTimeTrade(trade: Trade(name: "",
-                                                                position: Position(unitSize: "1",
-                                                                                   positionAvgCost: "")),
-                                                   realTimeInfo: TradingInfo())
+                    let emptyTrade = emptyRealTimeTrade()
                     self.userdata.realTimeTrades.insert(emptyTrade, at: 0)
                     }
                 ){
@@ -65,10 +50,7 @@ struct PreferenceView: View {
                     }
                     PreferenceRow(realTimeTrade: item)
                     Button(action: {
-                        let emptyTrade = RealTimeTrade(trade: Trade(name: "",
-                                                                    position: Position(unitSize: "1",
-                                                                                       positionAvgCost: "")),
-                                                       realTimeInfo: TradingInfo())
+                        let emptyTrade = emptyRealTimeTrade()
                         if let index = self.userdata.realTimeTrades.map({$0.id}).firstIndex(of: item.id) {
                             self.userdata.realTimeTrades.insert(emptyTrade, at: index+1)
                         }
@@ -84,6 +66,6 @@ struct PreferenceView: View {
 
 struct PreferenceView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferenceView(userdata: UserData.sharedInstance)
+        PreferenceView(userdata: DataModel())
     }
 }

@@ -10,29 +10,24 @@ import Cocoa
 
 
 class StockMenuBarController {
-    init () {
+    init (data: DataModel) {
+        self.data = data
+        self.statusBar = StockStatusBar(data: data)
+        self.prefPopover = PreferencePopover(data: data)
         constructMainItem()
-        //updateTickerItemsFromPrefs()
-        self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(fetchAllQuote),                                                                              userInfo: nil, repeats: true)
-        self.cancellables = self.userData.$realTimeTrades
-//            .map { trades in
-//                trades.count
-//            }
-            //.debounce(for: .seconds(1), scheduler: RunLoop.main)
-            //.removeDuplicates()
-            .receive(on: RunLoop.main)
-            .sink { [weak self] receiveValue in
-                self?.updateTickerItemsFromPrefs()
+        self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(sendAllTradesToSubscriber),                                                                              userInfo: nil, repeats: true)
+        self.cancellables = self.data.$realTimeTrades
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] realTimeTrades in
+                self?.updateSymbolItemsFromUserData(realTimeTrades: realTimeTrades)
         }
     }
     private var cancellables : AnyCancellable?
-    private let statusBar = StockStatusBar()
-
-    private let userData = UserData.sharedInstance
-    //private lazy var prefs = Preferences()
+    private let statusBar : StockStatusBar
+    private let data : DataModel
+    private var prefPopover : PreferencePopover
     private lazy var timer = Timer()
-    private lazy var prefPopover = PreferencePopover()
-    private lazy var mainMenuItems = [NSMenuItem(title: "Refresh", action: #selector(fetchAllQuote), keyEquivalent: ""),
+    private lazy var mainMenuItems = [NSMenuItem(title: "Refresh", action: #selector(sendAllTradesToSubscriber), keyEquivalent: ""),
                                       NSMenuItem.separator(),
                                       NSMenuItem(title: "Preference", action: #selector(togglePopover), keyEquivalent: ""),
                                       NSMenuItem(title:  "Exit", action: #selector(quitApp), keyEquivalent: "q")]
@@ -45,20 +40,17 @@ extension StockMenuBarController {
         }
         self.statusBar.constructMainItemMenu(items: mainMenuItems)
     }
-    private func updateTickerItemsFromPrefs() {
-        statusBar.removeAllTickerItems()
-        for iter in (0..<userData.realTimeTrades.count) {
-            statusBar.constructTickerItems(realTimeTrade: userData.realTimeTrades[iter])
+    private func updateSymbolItemsFromUserData(realTimeTrades: [RealTimeTrade]) {
+        statusBar.removeAllSymbolItems()
+        for iter in (0..<realTimeTrades.count) {
+            statusBar.constructSymbolItem(from: realTimeTrades[iter])
         }
-//        for id in prefs.nonEmptyTickers() {
-//            statusBar.constructTickerItems(tickerId: id)
-//        }
-        fetchAllQuote()
+        //sendAllTradesToSubscriber(realTimeTrades: realTimeTrades)
     }
 
-    @objc private func fetchAllQuote() {
-        for realTimeTrade in self.userData.realTimeTrades {
-            realTimeTrade.sendTradeToPublisher()
+    @objc private func sendAllTradesToSubscriber() {
+        self.data.realTimeTrades.forEach { each in
+            each.sendTradeToPublisher()
         }
     }
     @objc private func quitApp() {

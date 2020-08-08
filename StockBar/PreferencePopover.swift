@@ -8,11 +8,10 @@ import Cocoa
 import SwiftUI
 
 class PreferencePopover: NSPopover {
-    override init() {
+    init(data: DataModel) {
         super.init()
         self.behavior = NSPopover.Behavior.transient
-        //self.contentViewController = PreferenceViewController.buildController()
-        self.contentViewController = PreferenceHostingController()
+        self.contentViewController = PreferenceHostingController(data: data)
     }
     
     required init?(coder: NSCoder) {

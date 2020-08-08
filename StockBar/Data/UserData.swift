@@ -28,10 +28,6 @@ class RealTimeTrade : ObservableObject, Identifiable {
                 .removeDuplicates {
                     $0.name == $1.name
             })
-            //.debounce(for: .seconds(1), scheduler: RunLoop.main)
-//            .removeDuplicates {
-//                $0.name == $1.name
-//            }
             .filter {
                 $0.name != ""
             }
@@ -42,16 +38,14 @@ class RealTimeTrade : ObservableObject, Identifiable {
             }
             .map(\.data)
             .compactMap { try? JSONDecoder().decode(Overview.self, from: $0) }
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink (
                 receiveCompletion: { _ in
-                    print ("HitCompletion")
                 },
                 receiveValue: { [weak self] overview in
                     let chart = overview.chart;
-                    if let msg = chart.error {
-                        // Error occured
-                        print ("\(msg)")
+                    if let _ = chart.error {
+                        self?.realTimeInfo = TradingInfo()
                     }
                     else if let results = chart.result {
                         let newRealTimeInfo = TradingInfo(currentPrice: results[0].meta.regularMarketPrice,
@@ -70,18 +64,25 @@ class RealTimeTrade : ObservableObject, Identifiable {
 
 // This is a single source of truth during the running of this app.
 // It loads from the UserDefaults at startup and all the user input goes here. It then updates the UserDefaults
-class UserData : ObservableObject{
-    static let sharedInstance = UserData()
+class DataModel : ObservableObject{
     let decoder = JSONDecoder()
     @Published var realTimeTrades : [RealTimeTrade]
     init() {
         let data = UserDefaults.standard.object(forKey: "usertrades") as? Data ?? Data()
-        self.realTimeTrades = ((try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 3)).map {
-            RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
-        }
+        self.realTimeTrades = ((try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 1))
+            .map {
+                RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
+            }
     }
 }
 
 func emptyTrades(size : Int) -> [Trade]{
     return [Trade].init(repeating: Trade(name: "", position: Position(unitSize: "1", positionAvgCost: "")), count: size)
+}
+
+func emptyRealTimeTrade()->RealTimeTrade {
+    return RealTimeTrade(trade: Trade(name: "",
+                                      position: Position(unitSize: "1",
+                                                         positionAvgCost: "")),
+                         realTimeInfo: TradingInfo())
 }

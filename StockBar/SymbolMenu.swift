@@ -10,18 +10,18 @@ func dailyPNLNumber(_ tradingInfo: TradingInfo, _ position: Position)->Double {
     return (tradingInfo.currentPrice - tradingInfo.prevClosePrice)*unitSize
 }
 func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
-    let pnlString = String(format: "%.2f", dailyPNLNumber(tradingInfo, position))
+    let pnlString = String(format: "%+.2f", dailyPNLNumber(tradingInfo, position))
     return "DailyPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
 }
 fileprivate func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
     let unitSize = Double(position.unitSize) ?? 0
     let avgCost = Double(position.positionAvgCost) ?? 0
     let pnl = (tradingInfo.currentPrice - avgCost)*unitSize
-    let pnlString = String(format: "%.2f", pnl)
+    let pnlString = String(format: "%+.2f", pnl)
     return "TotalPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
 }
 
-final class TickerMenu: NSMenu {
+final class SymbolMenu: NSMenu {
     init(tradingInfo: TradingInfo, position: Position) {
         super.init(title: String())
         self.addItem(withTitle: tradingInfo.getPrice(), action: nil, keyEquivalent: "")
@@ -35,27 +35,5 @@ final class TickerMenu: NSMenu {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func updateTickerMenu(metaInfo: Meta) {
-        self.item(at: 0)!.title = metaInfo.getPrice()
-        self.item(at: 1)!.title = metaInfo.getChangePct()
-        self.item(at: 2)!.title = metaInfo.getLongChange()
-        self.item(at: 3)!.title = metaInfo.getTimeInfo()
-    }
-}
-
-final class TickerErrorMenu: NSMenu {
-    init(errorMsg: String) {
-        super.init(title: String())
-        self.addItem(withTitle: errorMsg, action: nil, keyEquivalent: "")
-    }
-    
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func updateErrorMenu(error: Error) {
-        self.item(at: 0)!.title = error.errorDescription
     }
 }

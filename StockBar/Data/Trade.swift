@@ -11,13 +11,6 @@ import Foundation
 struct Trade : Codable, Equatable {
     var name : String
     var position : Position
-//    let tickerPublisher = URLSession.shared.dataTaskPublisher(for: url)
-//                            .map(\.data)
-//                            .decode(
-//                                type: Overview.self,
-//                                decoder: JSONDecoder()
-//                            )
-//                            .receive(on: DispatchQueue.main)
 }
 
 struct Position : Codable, Equatable {
