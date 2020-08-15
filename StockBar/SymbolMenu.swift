@@ -23,13 +23,13 @@ fileprivate func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->Str
 fileprivate func totalPositionCost(_ position: Position)->String {
     let unitSize = Double(position.unitSize) ?? .nan
     let avgCost = Double(position.positionAvgCost) ?? .nan
-    return "Total position cost: "+String(format: "%.2f", unitSize*avgCost)
+    return "Position cost: "+String(format: "%.2f", unitSize*avgCost)
 }
 fileprivate func currentPositionValue(_ tradingInfo: TradingInfo, _ position: Position)->String {
     let unitSize = Double(position.unitSize) ?? .nan
     let positionValue = tradingInfo.currentPrice*unitSize
     let positionString = String(format: "%.2f", positionValue)
-    return "Current position value: " + (tradingInfo.currency ?? "Price") + " " + positionString
+    return "Market value: " + (tradingInfo.currency ?? "Price") + " " + positionString
 }
 
 final class SymbolMenu: NSMenu {
@@ -43,7 +43,7 @@ final class SymbolMenu: NSMenu {
         self.addItem(withTitle: dailyPNL(tradingInfo, position), action: nil, keyEquivalent: "")
         self.addItem(withTitle: totalPNL(tradingInfo, position), action: nil, keyEquivalent: "")
         self.addItem(withTitle: "Units: \(position.unitSize)", action: nil, keyEquivalent: "")
-        self.addItem(withTitle: "AvgPositionCost: \(position.positionAvgCost)", action: nil, keyEquivalent: "")
+        self.addItem(withTitle: "Avg Position Cost: \(position.positionAvgCost)", action: nil, keyEquivalent: "")
         self.addItem(withTitle: totalPositionCost(position), action: nil, keyEquivalent: "")
         self.addItem(withTitle: currentPositionValue(tradingInfo, position), action: nil, keyEquivalent: "")
     }

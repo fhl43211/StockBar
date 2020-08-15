@@ -12,6 +12,7 @@ class PreferencePopover: NSPopover {
         super.init()
         self.behavior = NSPopover.Behavior.transient
         self.contentViewController = PreferenceHostingController(data: data)
+        self.contentSize = CGSize(width: 400, height: 400)
     }
     
     required init?(coder: NSCoder) {

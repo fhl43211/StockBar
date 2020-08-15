@@ -14,7 +14,9 @@ struct PreferenceRow : View {
         HStack {
             Spacer()
             TextField( "symbol", text: self.$realTimeTrade.trade.name )
+            Spacer()
             TextField( "unit size", text: self.$realTimeTrade.trade.position.unitSize )
+            Spacer()
             TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCost )
             Spacer()
         }
@@ -29,7 +31,9 @@ struct PreferenceView: View {
             HStack {
                 Spacer()
                 Text("Symbol")
+                Spacer()
                 Text("Unit")
+                Spacer()
                 Text("Avg position cost")
                 Button(action: {
                     let emptyTrade = emptyRealTimeTrade()
