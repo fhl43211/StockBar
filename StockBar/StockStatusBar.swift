@@ -9,8 +9,10 @@ import Combine
 import Cocoa
 
 class StockStatusBar: NSStatusBar {
-    override init() {
-        super.init()
+    let data : DataModel
+    init(data: DataModel) {
+        //super.init()
+        self.data = data
         mainStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         mainStatusItem?.button?.title = "StockBar"
     }
@@ -21,26 +23,31 @@ class StockStatusBar: NSStatusBar {
         }
         mainStatusItem?.menu = menu
     }
-    func removeAllTickerItems() {
-        tickerStatusItems = []
+    func removeAllSymbolItems() {
+        symbolStatusItems.removeAll()
     }
-    func constructTickerItems(tickerId : String) {
-        tickerStatusItems.append(StockStatusItemController(tickerId: tickerId))
-    }
-    func tickerItems() -> [StockStatusItemController] {
-        return tickerStatusItems
+    func constructSymbolItem(from realTimeTrade : RealTimeTrade) {
+        symbolStatusItems.append(StockStatusItemController(realTimeTrade: realTimeTrade))
     }
     func mainItem() -> NSStatusItem? {
         return mainStatusItem
     }
     private var mainStatusItem : NSStatusItem?
-    private var tickerStatusItems : [StockStatusItemController] = []
+    private var symbolStatusItems : [StockStatusItemController] = []
 }
 
 class StockStatusItemController {
-    init(tickerId : String) {
-        item.button?.title = tickerId
-        item.button?.alternateTitle = tickerId
+    init(realTimeTrade : RealTimeTrade) {
+        item.button?.title = realTimeTrade.trade.name
+        item.button?.alternateTitle = realTimeTrade.trade.name
+        cancellable = Publishers.CombineLatest(realTimeTrade.sharedPassThroughTrade.merge(with: realTimeTrade.$trade.share()),
+                                               realTimeTrade.$realTimeInfo)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (trade, trading) in
+                self?.item.button?.title = trade.name + String(format: "%+.2f", dailyPNLNumber(trading, trade.position))
+                self?.item.button?.alternateTitle = trade.name
+                self?.item.menu = SymbolMenu(tradingInfo: trading, position: trade.position)
+        }
     }
     var item: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     var cancellable: AnyCancellable?

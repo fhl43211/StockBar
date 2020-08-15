@@ -5,22 +5,29 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Foundation
+import Combine
 import Cocoa
 
 
 class StockMenuBarController {
-    init () {
+    init (data: DataModel) {
+        self.data = data
+        self.statusBar = StockStatusBar(data: data)
+        self.prefPopover = PreferencePopover(data: data)
         constructMainItem()
-        updateTickerItemsFromPrefs()
-        setupPrefsObservers()
-        self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(fetchAllQuote),                                                                              userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(sendAllTradesToSubscriber),                                                                              userInfo: nil, repeats: true)
+        self.cancellables = self.data.$realTimeTrades
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] realTimeTrades in
+                self?.updateSymbolItemsFromUserData(realTimeTrades: realTimeTrades)
+        }
     }
-
-    private let statusBar = StockStatusBar()
-    private lazy var prefs = Preferences()
+    private var cancellables : AnyCancellable?
+    private let statusBar : StockStatusBar
+    private let data : DataModel
+    private var prefPopover : PreferencePopover
     private lazy var timer = Timer()
-    private lazy var prefPopover = PreferencePopover()
-    private lazy var mainMenuItems = [NSMenuItem(title: "Refresh", action: #selector(fetchAllQuote), keyEquivalent: ""),
+    private lazy var mainMenuItems = [NSMenuItem(title: "Refresh", action: #selector(sendAllTradesToSubscriber), keyEquivalent: ""),
                                       NSMenuItem.separator(),
                                       NSMenuItem(title: "Preference", action: #selector(togglePopover), keyEquivalent: ""),
                                       NSMenuItem(title:  "Exit", action: #selector(quitApp), keyEquivalent: "q")]
@@ -33,64 +40,17 @@ extension StockMenuBarController {
         }
         self.statusBar.constructMainItemMenu(items: mainMenuItems)
     }
-    private func updateTickerItemsFromPrefs() {
-        statusBar.removeAllTickerItems()
-        for id in prefs.nonEmptyTickers() {
-            statusBar.constructTickerItems(tickerId: id)
+    private func updateSymbolItemsFromUserData(realTimeTrades: [RealTimeTrade]) {
+        statusBar.removeAllSymbolItems()
+        for iter in (0..<realTimeTrades.count) {
+            statusBar.constructSymbolItem(from: realTimeTrades[iter])
         }
-        fetchAllQuote()
-    }
-    private func fetchQuoteAndUpdateItem(itemController: StockStatusItemController?) {
-        let item = itemController?.item
-        if (item == nil) {
-            return
-        }
-        if (item!.button == nil) {
-            return
-        }
-        let button = item!.button
-        let tickerId = button!.alternateTitle
-        let url = URL( string: ("https://query1.finance.yahoo.com/v8/finance/chart/" + tickerId + "?interval=1d") )!
-        let tickerPublisher = URLSession.shared.dataTaskPublisher(for: url)
-                                .map(\.data)
-                                .decode(
-                                    type: Overview.self,
-                                    decoder: JSONDecoder()
-                                )
-                                .receive(on: DispatchQueue.main)
-        itemController?.cancellable = tickerPublisher.sink(
-            receiveCompletion: { _ in
-            },
-            receiveValue: { overview in
-                let chart = overview.chart;
-                if let msg = chart.error {
-                    // Error occured
-                    if let errorMenu = item!.menu as? TickerErrorMenu {
-                        errorMenu.updateErrorMenu(error: msg)
-                    }
-                    else {
-                        button!.title = button!.alternateTitle
-                        item!.menu = TickerErrorMenu(errorMsg: msg.errorDescription)
-                    }
-                }
-                else if let results = chart.result {
-                    let metaInfo = results[0].meta
-                    button!.title = metaInfo.symbol + metaInfo.getChange()
-                    if let tickerMenu = item!.menu as? TickerMenu {
-                        tickerMenu.updateTickerMenu(metaInfo: metaInfo)
-                    }
-                    else {
-                        item!.menu = TickerMenu(metaInfo: metaInfo)
-                    }
-                    
-                }
-            }
-        )
+        //sendAllTradesToSubscriber(realTimeTrades: realTimeTrades)
     }
 
-    @objc private func fetchAllQuote() {
-        for tickerItem in self.statusBar.tickerItems() {
-            fetchQuoteAndUpdateItem(itemController: tickerItem)
+    @objc private func sendAllTradesToSubscriber() {
+        self.data.realTimeTrades.forEach { each in
+            each.sendTradeToPublisher()
         }
     }
     @objc private func quitApp() {
@@ -105,14 +65,6 @@ extension StockMenuBarController {
         if let button = self.statusBar.mainItem()?.button {
             prefPopover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
             NSApp.activate(ignoringOtherApps: true)
-        }
-    }
-    func setupPrefsObservers() {
-        let notificationName = Notification.Name(rawValue: "PrefsChanged")
-        NotificationCenter.default.addObserver(forName: notificationName,
-                                               object: nil, queue: nil) {
-          (notification) in
-                                                self.updateTickerItemsFromPrefs()
         }
     }
 }

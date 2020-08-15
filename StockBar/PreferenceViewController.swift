@@ -5,53 +5,27 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Cocoa
-
-class PreferenceViewController: NSViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
-        showExistingPrefs()
+import Combine
+import SwiftUI
+class PreferenceHostingController : NSHostingController<PreferenceView> {
+    private let data : DataModel
+    init(data: DataModel) {
+        self.data = data
+        super.init(rootView: PreferenceView(userdata: data))
     }
     
-    private var prefs = Preferences()
-    
-    @IBOutlet weak var tickerBox0: NSTextField!
-    @IBOutlet weak var tickerBox1: NSTextField!
-    @IBOutlet weak var tickerBox2: NSTextField!
-    @IBOutlet weak var tickerBox3: NSTextField!
-    @IBOutlet weak var tickerBox4: NSTextField!
-    
-    func showExistingPrefs() {
-        self.tickerBox0.stringValue = prefs.prefTicker0
-        self.tickerBox1.stringValue = prefs.prefTicker1
-        self.tickerBox2.stringValue = prefs.prefTicker2
-        self.tickerBox3.stringValue = prefs.prefTicker3
-        self.tickerBox4.stringValue = prefs.prefTicker4
-    }
-    
-    func saveNewPrefs() {
-        prefs.prefTicker0 = self.tickerBox0.stringValue
-        prefs.prefTicker1 = self.tickerBox1.stringValue
-        prefs.prefTicker2 = self.tickerBox2.stringValue
-        prefs.prefTicker3 = self.tickerBox3.stringValue
-        prefs.prefTicker4 = self.tickerBox4.stringValue
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "PrefsChanged"),
-                                        object: nil)
+    @objc required dynamic init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     override func viewWillDisappear() {
         super.viewWillDisappear()
         saveNewPrefs()
     }
-}
-
-extension PreferenceViewController {
-  static func buildController() -> PreferenceViewController {
-    let storyboard = NSStoryboard(name: NSStoryboard.Name("Main"), bundle: nil)
-    let identifier = NSStoryboard.SceneIdentifier("PrefViewController")
-    guard let viewcontroller = storyboard.instantiateController(withIdentifier: identifier) as? PreferenceViewController else {
-      fatalError("Cannot find PrefViewController")
+    func saveNewPrefs() {
+        let trades = data.realTimeTrades.map {
+            $0.trade
+        }
+        let encodedData : Data = try! JSONEncoder().encode(trades)
+        UserDefaults.standard.set( encodedData, forKey: "usertrades")
     }
-    return viewcontroller
-  }
 }
