@@ -1,5 +1,5 @@
 //
-//  TickerMenu.swift
+//  SymbolMenu.swift
 //  StockBar
 //
 //  Created by Hongliang Fan on 2020-06-20.
@@ -11,14 +11,14 @@ func dailyPNLNumber(_ tradingInfo: TradingInfo, _ position: Position)->Double {
 }
 func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
     let pnlString = String(format: "%+.2f", dailyPNLNumber(tradingInfo, position))
-    return "DailyPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
+    return "Daily PnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
 }
 fileprivate func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
     let unitSize = Double(position.unitSize) ?? .nan
     let avgCost = Double(position.positionAvgCost) ?? .nan
     let pnl = (tradingInfo.currentPrice - avgCost)*unitSize
     let pnlString = String(format: "%+.2f", pnl)
-    return "TotalPnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
+    return "Total PnL: " + (tradingInfo.currency ?? "Price") + " " + pnlString
 }
 fileprivate func totalPositionCost(_ position: Position)->String {
     let unitSize = Double(position.unitSize) ?? .nan

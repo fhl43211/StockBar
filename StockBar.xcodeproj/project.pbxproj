@@ -76,12 +76,11 @@
 				1919BC1F249EB09500D708F4 /* StockMenuBarController.swift */,
 				1919BC1E249EB09500D708F4 /* StockStatusBar.swift */,
 				1919BC1B249EB09500D708F4 /* SymbolMenu.swift */,
-				1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */,
+				19E9000824D776C400D4D818 /* PreferenceView.swift */,
 				1919BC0F249EAEF100D708F4 /* Assets.xcassets */,
 				1919BC11249EAEF100D708F4 /* Main.storyboard */,
 				1919BC14249EAEF100D708F4 /* Info.plist */,
 				1919BC15249EAEF100D708F4 /* StockBar.entitlements */,
-				19E9000824D776C400D4D818 /* PreferenceView.swift */,
 			);
 			path = StockBar;
 			sourceTree = "<group>";
@@ -89,6 +88,7 @@
 		1938789524D647B0009FA349 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1919BC21249EB09500D708F4 /* YahooFinanceDecoder.swift */,
 				1938789624D647C8009FA349 /* Trade.swift */,
 				19E9000624D73BC600D4D818 /* UserData.swift */,
 			);

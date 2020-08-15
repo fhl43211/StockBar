@@ -3,8 +3,6 @@
 //  StockBar
 //
 //  Created by Hongliang Fan on 2020-08-02.
-//  Copyright © 2020 Hongliang Fan. All rights reserved.
-//
 
 import SwiftUI
 
