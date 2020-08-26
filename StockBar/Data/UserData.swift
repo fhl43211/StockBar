@@ -14,12 +14,13 @@ class RealTimeTrade : ObservableObject, Identifiable {
     var sharedPassThroughTrade: Publishers.Share<PassthroughSubject<Trade, Never>>
     @Published var realTimeInfo : TradingInfo
     func sendTradeToPublisher() {
+        if (cancelled) {
+            initCancellable()
+        }
         passThroughTrade.send(trade)
     }
-    init(trade: Trade, realTimeInfo: TradingInfo) {
-        self.trade = trade
-        self.realTimeInfo = realTimeInfo
-        self.sharedPassThroughTrade = self.passThroughTrade.share()
+    func initCancellable() {
+        self.cancelled = false
         self.cancellable = sharedPassThroughTrade
             .merge(with: $trade.share()
                 .debounce(for: .seconds(1), scheduler: RunLoop.main)
@@ -31,14 +32,15 @@ class RealTimeTrade : ObservableObject, Identifiable {
             }
             .setFailureType(to: URLSession.DataTaskPublisher.Failure.self)
             .flatMap { singleTrade in
-                    //print ("Update")
                     return URLSession.shared.dataTaskPublisher(for: URL( string: ("https://query1.finance.yahoo.com/v8/finance/chart/\(singleTrade.name)?interval=1d") )!)
             }
             .map(\.data)
             .compactMap { try? JSONDecoder().decode(Overview.self, from: $0) }
             .receive(on: DispatchQueue.main)
             .sink (
-                receiveCompletion: { _ in
+                receiveCompletion: { [weak self] _ in
+                    self?.cancellable?.cancel()
+                    self?.cancelled = true
                 },
                 receiveValue: { [weak self] overview in
                     let chart = overview.chart;
@@ -56,7 +58,14 @@ class RealTimeTrade : ObservableObject, Identifiable {
                 }
             )
     }
+    init(trade: Trade, realTimeInfo: TradingInfo) {
+        self.trade = trade
+        self.realTimeInfo = realTimeInfo
+        self.sharedPassThroughTrade = self.passThroughTrade.share()
+        initCancellable()
+    }
     var cancellable : AnyCancellable? = nil
+    var cancelled : Bool = false
     
 }
 

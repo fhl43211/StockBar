@@ -41,7 +41,7 @@ class StockStatusItemController {
         item.button?.title = realTimeTrade.trade.name
         item.button?.alternateTitle = realTimeTrade.trade.name
         cancellable = Publishers.CombineLatest(realTimeTrade.sharedPassThroughTrade.merge(with: realTimeTrade.$trade.share()),
-                                               realTimeTrade.$realTimeInfo)
+                                               realTimeTrade.$realTimeInfo.share())
             .receive(on: DispatchQueue.main)
             .sink { [weak self] (trade, trading) in
                 self?.item.button?.title = trade.name + String(format: "%+.2f", dailyPNLNumber(trading, trade.position))
