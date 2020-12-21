@@ -13,9 +13,9 @@ struct PreferenceRow : View {
             Spacer()
             TextField( "symbol", text: self.$realTimeTrade.trade.name )
             Spacer()
-            TextField( "Units", text: self.$realTimeTrade.trade.position.unitSize )
+            TextField( "Units", text: self.$realTimeTrade.trade.position.unitSizeString )
             Spacer()
-            TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCost )
+            TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCostString )
             Spacer()
         }
     }
