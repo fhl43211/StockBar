@@ -5,7 +5,6 @@
 //  Created by Hongliang Fan on 2020-08-02.
 
 import SwiftUI
-import Combine
 
 struct PreferenceRow : View {
     @ObservedObject var realTimeTrade : RealTimeTrade
