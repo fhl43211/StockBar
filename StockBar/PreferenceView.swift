@@ -5,6 +5,7 @@
 //  Created by Hongliang Fan on 2020-08-02.
 
 import SwiftUI
+import Combine
 
 struct PreferenceRow : View {
     @ObservedObject var realTimeTrade : RealTimeTrade
@@ -13,9 +14,9 @@ struct PreferenceRow : View {
             Spacer()
             TextField( "symbol", text: self.$realTimeTrade.trade.name )
             Spacer()
-            TextField( "Units", text: self.$realTimeTrade.trade.position.unitSize )
+            TextField( "Units", text: self.$realTimeTrade.trade.position.unitSizeString )
             Spacer()
-            TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCost )
+            TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCostString )
             Spacer()
         }
     }

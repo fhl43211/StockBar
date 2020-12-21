@@ -12,8 +12,38 @@ struct Trade : Codable, Equatable {
 }
 
 struct Position : Codable, Equatable {
-    var unitSize : String
-    var positionAvgCost : String
+    var unitSizeString : String {
+        get {
+            return self._unitSize;
+        }
+        set(newUnitSize) {
+            if (Double(newUnitSize) != nil) {
+                _unitSize = newUnitSize;
+            }
+            else {
+                _unitSize = "1";
+            }
+        }
+    }
+    var unitSize : Double {
+        get {
+            return Double(unitSizeString) ?? 1
+        }
+    }
+    var positionAvgCostString : String
+    var positionAvgCost : Double {
+        get {
+            return Double(positionAvgCostString) ?? .nan
+        }
+    }
+    private var _unitSize : String
+    init(unitSize : String, positionAvgCost : String)
+    {
+        self._unitSize = "1"
+        self.positionAvgCostString = positionAvgCost
+        self.unitSizeString = unitSize
+    }
+    
 }
 
 struct TradingInfo {
