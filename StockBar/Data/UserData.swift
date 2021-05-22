@@ -7,8 +7,26 @@
 import Foundation
 import Combine
 
+// This is a single source of truth during the running of this app.
+// It loads from the UserDefaults at startup and wraps the Trade with empty RealTimeTrading info.
+// All the user input in preference goes here to modify Trade and then updates UserDeafults.
+// All the real time trading info fetched from URLSession
+// goes here to update the RealTimeTrading, then shows up on the NSStatusItem.
+class DataModel : ObservableObject{
+    let decoder = JSONDecoder()
+    @Published var realTimeTrades : [RealTimeTrade]
+    init() {
+        let data = UserDefaults.standard.object(forKey: "usertrades") as? Data ?? Data()
+        self.realTimeTrades = ((try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 1))
+            .map {
+                RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
+            }
+    }
+}
+
 class RealTimeTrade : ObservableObject, Identifiable {
     let id = UUID()
+    static let errorQueryString = "https://query1.finance.yahoo.com/v8/finance/chart/?symbol=&interval=1d)"
     @Published var trade : Trade
     private let passThroughTrade : PassthroughSubject<Trade, Never> = PassthroughSubject()
     var sharedPassThroughTrade: Publishers.Share<PassthroughSubject<Trade, Never>>
@@ -32,7 +50,7 @@ class RealTimeTrade : ObservableObject, Identifiable {
             }
             .setFailureType(to: URLSession.DataTaskPublisher.Failure.self)
             .flatMap { singleTrade in
-                    return URLSession.shared.dataTaskPublisher(for: URL( string: ("https://query1.finance.yahoo.com/v8/finance/chart/\(singleTrade.name)?interval=1d") )!)
+                return URLSession.shared.dataTaskPublisher(for: URL( string: "https://query1.finance.yahoo.com/v8/finance/chart/?symbol=\(singleTrade.name)&interval=1d".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? RealTimeTrade.errorQueryString)!)
             }
             .map(\.data)
             .compactMap { try? JSONDecoder().decode(Overview.self, from: $0) }
@@ -67,20 +85,6 @@ class RealTimeTrade : ObservableObject, Identifiable {
     var cancellable : AnyCancellable? = nil
     var cancelled : Bool = false
     
-}
-
-// This is a single source of truth during the running of this app.
-// It loads from the UserDefaults at startup and all the user input goes here. It then updates the UserDefaults
-class DataModel : ObservableObject{
-    let decoder = JSONDecoder()
-    @Published var realTimeTrades : [RealTimeTrade]
-    init() {
-        let data = UserDefaults.standard.object(forKey: "usertrades") as? Data ?? Data()
-        self.realTimeTrades = ((try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 1))
-            .map {
-                RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
-            }
-    }
 }
 
 func emptyTrades(size : Int) -> [Trade]{

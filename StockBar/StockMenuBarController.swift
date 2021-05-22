@@ -12,10 +12,12 @@ import Cocoa
 class StockMenuBarController {
     init (data: DataModel) {
         self.data = data
-        self.statusBar = StockStatusBar(data: data)
+        self.statusBar = StockStatusBar()
         self.prefPopover = PreferencePopover(data: data)
         constructMainItem()
         self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(sendAllTradesToSubscriber),                                                                              userInfo: nil, repeats: true)
+        // Every time the vector of $realTimeTrades changes (e.g. a new symbol is inserted anywhere or a symbol is deleted),
+        //  this resets all the symbol items of the menubar
         self.cancellables = self.data.$realTimeTrades
             .receive(on: DispatchQueue.main)
             .sink { [weak self] realTimeTrades in
@@ -45,9 +47,10 @@ extension StockMenuBarController {
         for iter in (0..<realTimeTrades.count) {
             statusBar.constructSymbolItem(from: realTimeTrades[iter])
         }
-        //sendAllTradesToSubscriber(realTimeTrades: realTimeTrades)
     }
-
+    // Trigger the quotes update for all symbols from URLSession.
+    // This happens either when manually pressing the Refresh button
+    // or every 60 seconds specified in StockMenuBarController.timer
     @objc private func sendAllTradesToSubscriber() {
         self.data.realTimeTrades.forEach { each in
             each.sendTradeToPublisher()
