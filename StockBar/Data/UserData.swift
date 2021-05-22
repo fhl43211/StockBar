@@ -26,7 +26,8 @@ class DataModel : ObservableObject{
 
 class RealTimeTrade : ObservableObject, Identifiable {
     let id = UUID()
-    static let errorQueryString = "https://query1.finance.yahoo.com/v8/finance/chart/?symbol=&interval=1d)"
+    // This URL returns empty query results
+    static let emptyQueryURL = URL(string: "https://query1.finance.yahoo.com/v8/finance/chart/")!
     @Published var trade : Trade
     private let passThroughTrade : PassthroughSubject<Trade, Never> = PassthroughSubject()
     var sharedPassThroughTrade: Publishers.Share<PassthroughSubject<Trade, Never>>
@@ -50,7 +51,7 @@ class RealTimeTrade : ObservableObject, Identifiable {
             }
             .setFailureType(to: URLSession.DataTaskPublisher.Failure.self)
             .flatMap { singleTrade in
-                return URLSession.shared.dataTaskPublisher(for: URL( string: "https://query1.finance.yahoo.com/v8/finance/chart/?symbol=\(singleTrade.name)&interval=1d".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? RealTimeTrade.errorQueryString)!)
+                return URLSession.shared.dataTaskPublisher(for: URL( string: "https://query1.finance.yahoo.com/v8/finance/chart/?symbol=\(singleTrade.name)&interval=1d".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)! ) ?? RealTimeTrade.emptyQueryURL)
             }
             .map(\.data)
             .compactMap { try? JSONDecoder().decode(Overview.self, from: $0) }
@@ -66,12 +67,14 @@ class RealTimeTrade : ObservableObject, Identifiable {
                         self?.realTimeInfo = TradingInfo()
                     }
                     else if let results = chart.result {
-                        let newRealTimeInfo = TradingInfo(currentPrice: results[0].meta.regularMarketPrice,
-                                                          prevClosePrice: results[0].meta.chartPreviousClose,
-                                                          currency: results[0].meta.currency,
-                                                          regularMarketTime: results[0].meta.regularMarketTime,
-                                                          exchangeTimezoneName: results[0].meta.exchangeTimezoneName)
-                        self?.realTimeInfo = newRealTimeInfo
+                        if (!results.isEmpty) {
+                            let newRealTimeInfo = TradingInfo(currentPrice: results[0].meta.regularMarketPrice,
+                                                              prevClosePrice: results[0].meta.chartPreviousClose,
+                                                              currency: results[0].meta.currency,
+                                                              regularMarketTime: results[0].meta.regularMarketTime,
+                                                              exchangeTimezoneName: results[0].meta.exchangeTimezoneName)
+                            self?.realTimeInfo = newRealTimeInfo
+                        }
                     }
                 }
             )
