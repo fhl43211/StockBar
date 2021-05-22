@@ -54,7 +54,7 @@ struct TradingInfo {
     var regularMarketTime: Int = 0
     var exchangeTimezoneName: String = ""
     func getPrice()->String {
-        return (currency ?? "Price") + " " + String(format: "%.2f", currentPrice)
+        return (currency ?? "Price") + " " + String(format: "%.3f", currentPrice)
     }
     func getChange()->String {
         return String(format: "%+.2f",currentPrice - prevClosePrice)

@@ -9,10 +9,7 @@ import Combine
 import Cocoa
 
 class StockStatusBar: NSStatusBar {
-    let data : DataModel
-    init(data: DataModel) {
-        //super.init()
-        self.data = data
+    override init() {
         mainStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         mainStatusItem?.button?.title = "StockBar"
     }
@@ -40,6 +37,10 @@ class StockStatusItemController {
     init(realTimeTrade : RealTimeTrade) {
         item.button?.title = realTimeTrade.trade.name
         item.button?.alternateTitle = realTimeTrade.trade.name
+        // Set the toggle ButtonType to enable alternateTitle display
+        item.button?.setButtonType(NSButton.ButtonType.toggle)
+        // For a single trade, when any of the symbol, unit size, avg cost position, real time info changes,
+        // update the detail menu and the button title.
         cancellable = Publishers.CombineLatest(realTimeTrade.sharedPassThroughTrade.merge(with: realTimeTrade.$trade.share()),
                                                realTimeTrade.$realTimeInfo.share())
             .receive(on: DispatchQueue.main)
