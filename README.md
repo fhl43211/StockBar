@@ -19,7 +19,7 @@ Some symbol examples are listed below. Please refer to https://finance.yahoo.com
 * **GOOG** : Alphabet Inc Class C
 * **NFLX** : Netflix Inc
 * **<span>9626.HK</span>** : Bilibili Inc
-* **600519.SS** : Kweichow Moutai Co., Ltd
+* **<span>600519.SS</span>** : Kweichow Moutai Co., Ltd
 
 **Currency Exange**:
 * **USDJPY=X** : 1 US dollar equals to X Japanese yen
