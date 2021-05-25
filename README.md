@@ -1,8 +1,13 @@
-# StockBar
+<h1 align="center"> StockBar </h1>
 
+<p align="center">
+    <img alt="mainDisplay" src=Screenshots/StockBar.png>
+</p>
+
+## About
 A menu bar app that tracks changes of stock prices, currency exchange rates, and cryptocurrency prices every minute.
 The menu bar item displays the daily position changes if the unit size is provided in the settings. Otherwise, the per unit daily changes is displayed.
-![mainDisplay](Screenshots/StockBar.png)
+
 Click on the symbol name to show details such as the price, the change percentage, the last updated time stamp, and the position information. 
 
 Some symbol examples are listed below. Please refer to https://finance.yahoo.com/lookup/ for more.
@@ -29,9 +34,6 @@ Some symbol examples are listed below. Please refer to https://finance.yahoo.com
 **Cryptocurrencies**:
 * **BTC-USD** : 1 Bitcoin equals to X US dollar
 * **DOGE-USD** : 1 Dogecoin equals to X US dollar
-
-
-<img src="Screenshots/StockDetails.png" alt="details" width="200">
 
 ## Preference
 Provide the stock **symbols** to track in preference view. If unit sizes and average position costs are supplied, the open profit and loss will also be tracked. Click **StockBar** in the menu bar and select **Preference**. You may need to update the unit size and the average position cost after stock splits.
