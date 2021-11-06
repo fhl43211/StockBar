@@ -53,6 +53,7 @@ struct TradingInfo {
     var currency : String? = nil
     var regularMarketTime: Int = 0
     var exchangeTimezoneName: String = ""
+    var shortName: String = ""
     func getPrice()->String {
         return (currency ?? "Price") + " " + String(format: "%.3f", currentPrice)
     }
