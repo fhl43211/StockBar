@@ -39,7 +39,6 @@ Some symbol examples are listed below. Please refer to https://finance.yahoo.com
 Provide the stock **symbols** to track in preference view. If unit sizes and average position costs are supplied, the open profit and loss will also be tracked. Click **StockBar** in the menu bar and select **Preference**. You may need to update the unit size and the average position cost after stock splits.
 ![preference](Screenshots/Settings.png)
 ## API
-* In use: [yahoo finance api](https://query1.finance.yahoo.com/v8/finance/chart/?symbol=AAPL&interval=1d). However, there is no official guide.
+* In use: [yahoo finance api](https://query1.finance.yahoo.com/v6/finance/quote/?symbols=AAPL,GOOG). [Reference](https://www.yahoofinanceapi.com).
 * Other apis:
-    1. another yahoo api that can query multiple symbols at the same time. https://query1.finance.yahoo.com/v7/finance/quote?fields=symbol,shortName,priceHint,regularMarketPrice,regularMarketChange,regularMarketChangePercent,currency,regularMarketTime,fiftyTwoWeekHigh,fiftyTwoWeekLow&symbols=AAPL,GOOG
-    2. [alphavantage](https://www.alphavantage.co). Free API key is available (By the time of writing, any string can be a valid free API key). However, the free API can only send five requests per minute. It only has end-of-day Nasdaq quotes.
+    1. [alphavantage](https://www.alphavantage.co). Free API key is available (By the time of writing, any string can be a valid free API key). However, the free API can only send five requests per minute. It only has end-of-day Nasdaq quotes.
