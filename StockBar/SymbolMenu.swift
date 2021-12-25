@@ -29,6 +29,8 @@ fileprivate func currentPositionValue(_ tradingInfo: TradingInfo, _ position: Po
 final class SymbolMenu: NSMenu {
     init(tradingInfo: TradingInfo, position: Position) {
         super.init(title: String())
+        self.addItem(withTitle: tradingInfo.shortName, action: nil, keyEquivalent: "")
+        self.addItem(NSMenuItem.separator())
         self.addItem(withTitle: tradingInfo.getPrice(), action: nil, keyEquivalent: "")
         self.addItem(withTitle: tradingInfo.getChangePct(), action: nil, keyEquivalent: "")
         self.addItem(withTitle: tradingInfo.getLongChange(), action: nil, keyEquivalent: "")
