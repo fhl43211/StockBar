@@ -34,22 +34,24 @@ class StockStatusBar: NSStatusBar {
 }
 
 class StockStatusItemController {
-    init(realTimeTrade : RealTimeTrade) {
+    init(realTimeTrade: RealTimeTrade) {
         item.button?.title = realTimeTrade.trade.name
         item.button?.alternateTitle = realTimeTrade.trade.name
-        // Set the toggle ButtonType to enable alternateTitle display
-        item.button?.setButtonType(NSButton.ButtonType.toggle)
-        // For a single trade, when any of the symbol, unit size, avg cost position, real time info changes,
-        // update the detail menu and the button title.
-        cancellable = Publishers.CombineLatest(realTimeTrade.sharedPassThroughTrade.merge(with: realTimeTrade.$trade.share()),
-                                               realTimeTrade.$realTimeInfo.share())
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] (trade, trading) in
-                self?.item.button?.title = trade.name + String(format: "%+.2f", dailyPNLNumber(trading, trade.position))
-                self?.item.button?.alternateTitle = trade.name
-                self?.item.menu = SymbolMenu(tradingInfo: trading, position: trade.position)
+        item.button?.setButtonType(.toggle)
+
+        cancellable = Publishers.CombineLatest(
+            realTimeTrade.sharedPassThroughTrade.merge(with: realTimeTrade.$trade.share()),
+            realTimeTrade.$realTimeInfo.share()
+        )
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] (trade, trading) in
+            guard let self = self else { return }
+            self.item.button?.title = trade.name + String(format: "%+.2f", dailyPNLNumber(trading, trade.position))
+            self.item.button?.alternateTitle = trade.name
+            self.item.menu = SymbolMenu(tradingInfo: trading, position: trade.position)
         }
     }
+
     var item: NSStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     var cancellable: AnyCancellable?
 }

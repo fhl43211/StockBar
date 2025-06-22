@@ -6,16 +6,17 @@
 
 import SwiftUI
 
-struct PreferenceRow : View {
-    @ObservedObject var realTimeTrade : RealTimeTrade
+struct PreferenceRow: View {
+    @ObservedObject var realTimeTrade: RealTimeTrade
+
     var body: some View {
         HStack {
             Spacer()
-            TextField( "symbol", text: self.$realTimeTrade.trade.name )
+            TextField("Symbol", text: $realTimeTrade.trade.name)
             Spacer()
-            TextField( "Units", text: self.$realTimeTrade.trade.position.unitSizeString )
+            TextField("Units", text: $realTimeTrade.trade.position.unitSizeString)
             Spacer()
-            TextField( "average position cost", text: self.$realTimeTrade.trade.position.positionAvgCostString )
+            TextField("Average Position Cost", text: $realTimeTrade.trade.position.positionAvgCostString)
             Spacer()
         }
     }

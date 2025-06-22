@@ -20,9 +20,16 @@ class DataModel: ObservableObject {
     
     init() {
         let data = UserDefaults.standard.data(forKey: "usertrades") ?? Data()
-        let trades = (try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 1)
-        self.realTimeTrades = trades.map {
-            RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
+        do {
+            let trades = try decoder.decode([Trade].self, from: data)
+            self.realTimeTrades = trades.map {
+                RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
+            }
+        } catch {
+            print("Failed to decode user trades: \(error.localizedDescription)")
+            self.realTimeTrades = emptyTrades(size: 1).map { trade in
+                RealTimeTrade(trade: trade, realTimeInfo: TradingInfo())
+            }
         }
     }
 }

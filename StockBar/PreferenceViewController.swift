@@ -7,25 +7,31 @@
 import Cocoa
 import Combine
 import SwiftUI
-class PreferenceHostingController : NSHostingController<PreferenceView> {
-    private let data : DataModel
+
+class PreferenceHostingController: NSHostingController<PreferenceView> {
+    private let data: DataModel
+
     init(data: DataModel) {
         self.data = data
         super.init(rootView: PreferenceView(userdata: data))
     }
-    
+
     @objc required dynamic init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     override func viewWillDisappear() {
         super.viewWillDisappear()
         saveNewPrefs()
     }
+
     func saveNewPrefs() {
-        let trades = data.realTimeTrades.map {
-            $0.trade
+        do {
+            let trades = data.realTimeTrades.map { $0.trade }
+            let encodedData = try JSONEncoder().encode(trades)
+            UserDefaults.standard.set(encodedData, forKey: "usertrades")
+        } catch {
+            print("Failed to save preferences: \(error.localizedDescription)")
         }
-        let encodedData : Data = try! JSONEncoder().encode(trades)
-        UserDefaults.standard.set( encodedData, forKey: "usertrades")
     }
 }
