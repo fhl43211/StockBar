@@ -127,6 +127,51 @@ final class TradeModelTests: XCTestCase {
         XCTAssertEqual(dailyPNLNumber(info, pos), 0.0, accuracy: 0.01)
     }
 
+    // MARK: - Total P&L
+
+    func testTotalPNLProfit() {
+        let info = TradingInfo(currentPrice: 180.0, prevClosePrice: 175.0, currency: "USD")
+        let pos = Position(unitSize: "100", positionAvgCost: "150.00")
+        let result = totalPNL(info, pos)
+        XCTAssertTrue(result.contains("Total PnL"))
+        XCTAssertTrue(result.contains("USD"))
+        XCTAssertTrue(result.contains("+3000.00"))
+    }
+
+    func testTotalPNLLoss() {
+        let info = TradingInfo(currentPrice: 140.0, prevClosePrice: 145.0, currency: "USD")
+        let pos = Position(unitSize: "50", positionAvgCost: "160.00")
+        let result = totalPNL(info, pos)
+        XCTAssertTrue(result.contains("-1000.00"))
+    }
+
+    // MARK: - Position Cost & Market Value
+
+    func testTotalPositionCost() {
+        let info = TradingInfo(currentPrice: 180.0, prevClosePrice: 175.0, currency: "USD")
+        let pos = Position(unitSize: "100", positionAvgCost: "150.00")
+        let result = totalPositionCost(info, pos)
+        XCTAssertTrue(result.contains("Position Cost"))
+        XCTAssertTrue(result.contains("USD"))
+        XCTAssertTrue(result.contains("15000.00"))
+    }
+
+    func testCurrentPositionValue() {
+        let info = TradingInfo(currentPrice: 180.0, prevClosePrice: 175.0, currency: "USD")
+        let pos = Position(unitSize: "100", positionAvgCost: "150.00")
+        let result = currentPositionValue(info, pos)
+        XCTAssertTrue(result.contains("Market Value"))
+        XCTAssertTrue(result.contains("USD"))
+        XCTAssertTrue(result.contains("18000.00"))
+    }
+
+    func testCurrentPositionValueFractionalShares() {
+        let info = TradingInfo(currentPrice: 50000.0, prevClosePrice: 49000.0, currency: "USD")
+        let pos = Position(unitSize: "0.5", positionAvgCost: "30000")
+        let result = currentPositionValue(info, pos)
+        XCTAssertTrue(result.contains("25000.00"))
+    }
+
     // MARK: - Helper Functions
 
     func testEmptyTrades() {
@@ -146,7 +191,7 @@ final class TradeModelTests: XCTestCase {
 
     // MARK: - DataModel Persistence
 
-    private let testKey = "usertrades"
+    private let testKey = DataModel.userTradesKey
     private var savedData: Data?
 
     override func setUp() {

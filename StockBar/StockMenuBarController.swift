@@ -15,7 +15,6 @@ class StockMenuBarController {
         self.statusBar = StockStatusBar()
         self.prefPopover = PreferencePopover(data: data)
         constructMainItem()
-        self.timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(sendAllTradesToSubscriber),                                                                              userInfo: nil, repeats: true)
         // Every time the vector of $realTimeTrades changes (e.g. a new symbol is inserted anywhere or a symbol is deleted),
         //  this resets all the symbol items of the menubar
         self.cancellables = self.data.$realTimeTrades
@@ -23,6 +22,8 @@ class StockMenuBarController {
             .sink { [weak self] realTimeTrades in
                 self?.updateSymbolItemsFromUserData(realTimeTrades: realTimeTrades)
         }
+        // Fetch immediately on launch, which also starts the 60s refresh timer
+        sendAllTradesToSubscriber()
     }
     private var cancellables : AnyCancellable?
     private let statusBar : StockStatusBar
@@ -52,6 +53,11 @@ extension StockMenuBarController {
     // This happens either when manually pressing the Refresh button
     // or every 60 seconds specified in StockMenuBarController.timer
     @objc private func sendAllTradesToSubscriber() {
+        // Reset timer so manual refresh and timer-triggered refresh don't overlap
+        timer.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            self?.sendAllTradesToSubscriber()
+        }
         self.data.realTimeTrades.forEach { each in
             each.sendTradeToPublisher()
         }
@@ -65,7 +71,7 @@ extension StockMenuBarController {
     }
 
     func showPopover(sender: Any?) {
-        if let button = self.statusBar.mainItem()?.button {
+        if let button = self.statusBar.mainItem().button {
             prefPopover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
             NSApp.activate(ignoringOtherApps: true)
         }

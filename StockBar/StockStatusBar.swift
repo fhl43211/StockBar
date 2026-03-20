@@ -8,17 +8,20 @@ import Foundation
 import Combine
 import Cocoa
 
-class StockStatusBar: NSStatusBar {
-    override init() {
+class StockStatusBar {
+    private let mainStatusItem: NSStatusItem
+    private var symbolStatusItems: [StockStatusItemController] = []
+
+    init() {
         mainStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        mainStatusItem?.button?.title = "StockBar"
+        mainStatusItem.button?.title = "StockBar"
     }
     func constructMainItemMenu(items : [NSMenuItem]) {
         let menu = NSMenu()
         for item in items {
             menu.addItem(item)
         }
-        mainStatusItem?.menu = menu
+        mainStatusItem.menu = menu
     }
     func removeAllSymbolItems() {
         symbolStatusItems.removeAll()
@@ -26,11 +29,9 @@ class StockStatusBar: NSStatusBar {
     func constructSymbolItem(from realTimeTrade : RealTimeTrade) {
         symbolStatusItems.append(StockStatusItemController(realTimeTrade: realTimeTrade))
     }
-    func mainItem() -> NSStatusItem? {
+    func mainItem() -> NSStatusItem {
         return mainStatusItem
     }
-    private var mainStatusItem : NSStatusItem?
-    private var symbolStatusItems : [StockStatusItemController] = []
 }
 
 class StockStatusItemController {

@@ -5,26 +5,6 @@
 //  Created by Hongliang Fan on 2020-06-20.
 
 import Cocoa
-func dailyPNLNumber(_ tradingInfo: TradingInfo, _ position: Position)->Double {
-    return (tradingInfo.currentPrice - tradingInfo.prevClosePrice)*position.unitSize
-}
-func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
-    let pnlString = String(format: "%+.2f", dailyPNLNumber(tradingInfo, position))
-    return "Daily PnL: " + (tradingInfo.currency ?? "") + " " + pnlString
-}
-fileprivate func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
-    let pnl = (tradingInfo.currentPrice - position.positionAvgCost)*position.unitSize
-    let pnlString = String(format: "%+.2f", pnl)
-    return "Total PnL: " + (tradingInfo.currency ?? "") + " " + pnlString
-}
-fileprivate func totalPositionCost(_ tradingInfo: TradingInfo, _ position: Position)->String {
-    return "Position Cost: " + (tradingInfo.currency ?? "") + " " + String(format: "%.2f", position.unitSize*position.positionAvgCost)
-}
-fileprivate func currentPositionValue(_ tradingInfo: TradingInfo, _ position: Position)->String {
-    let positionValue = tradingInfo.currentPrice*position.unitSize
-    let positionString = String(format: "%.2f", positionValue)
-    return "Market Value: " + (tradingInfo.currency ?? "") + " " + positionString
-}
 
 final class SymbolMenu: NSMenu {
     init(tradingInfo: TradingInfo, position: Position) {
