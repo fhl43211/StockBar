@@ -19,7 +19,21 @@
 		1938789724D647C8009FA349 /* Trade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938789624D647C8009FA349 /* Trade.swift */; };
 		19E9000724D73BC600D4D818 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9000624D73BC600D4D818 /* UserData.swift */; };
 		19E9000924D776C400D4D818 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9000824D776C400D4D818 /* PreferenceView.swift */; };
+		AA111111000000000000000D /* YahooFinanceDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA111111000000000000000C /* YahooFinanceDecoderTests.swift */; };
+		AA111111000000000000000F /* TradeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA111111000000000000000E /* TradeModelTests.swift */; };
+		AA1111110000000000000011 /* CombineDataFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1111110000000000000010 /* CombineDataFlowTests.swift */; };
+		AA1111110000000000000013 /* YahooFinanceAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1111110000000000000012 /* YahooFinanceAPITests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA111111000000000000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1919BC00249EAEF000D708F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1919BC07249EAEF000D708F4;
+			remoteInfo = StockBar;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1919BC08249EAEF000D708F4 /* StockBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,10 +51,22 @@
 		1938789624D647C8009FA349 /* Trade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trade.swift; sourceTree = "<group>"; };
 		19E9000624D73BC600D4D818 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		19E9000824D776C400D4D818 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
+		AA1111110000000000000001 /* StockBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StockBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA111111000000000000000C /* YahooFinanceDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YahooFinanceDecoderTests.swift; sourceTree = "<group>"; };
+		AA111111000000000000000E /* TradeModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeModelTests.swift; sourceTree = "<group>"; };
+		AA1111110000000000000010 /* CombineDataFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineDataFlowTests.swift; sourceTree = "<group>"; };
+		AA1111110000000000000012 /* YahooFinanceAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YahooFinanceAPITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1919BC05249EAEF000D708F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1111110000000000000004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -54,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				1919BC0A249EAEF000D708F4 /* StockBar */,
+				AA111111000000000000000B /* StockBarTests */,
 				1919BC09249EAEF000D708F4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				1919BC08249EAEF000D708F4 /* StockBar.app */,
+				AA1111110000000000000001 /* StockBarTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +123,17 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		AA111111000000000000000B /* StockBarTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA111111000000000000000C /* YahooFinanceDecoderTests.swift */,
+				AA111111000000000000000E /* TradeModelTests.swift */,
+				AA1111110000000000000010 /* CombineDataFlowTests.swift */,
+				AA1111110000000000000012 /* YahooFinanceAPITests.swift */,
+			);
+			path = StockBarTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,6 +154,23 @@
 			productReference = 1919BC08249EAEF000D708F4 /* StockBar.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AA1111110000000000000002 /* StockBarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA1111110000000000000006 /* Build configuration list for PBXNativeTarget "StockBarTests" */;
+			buildPhases = (
+				AA1111110000000000000003 /* Sources */,
+				AA1111110000000000000004 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA1111110000000000000009 /* PBXTargetDependency */,
+			);
+			name = StockBarTests;
+			productName = StockBarTests;
+			productReference = AA1111110000000000000001 /* StockBarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -127,6 +183,10 @@
 				TargetAttributes = {
 					1919BC07249EAEF000D708F4 = {
 						CreatedOnToolsVersion = 11.5;
+					};
+					AA1111110000000000000002 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 1919BC07249EAEF000D708F4;
 					};
 				};
 			};
@@ -144,6 +204,7 @@
 			projectRoot = "";
 			targets = (
 				1919BC07249EAEF000D708F4 /* StockBar */,
+				AA1111110000000000000002 /* StockBarTests */,
 			);
 		};
 /* End PBXProject section */
@@ -178,7 +239,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA1111110000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA111111000000000000000D /* YahooFinanceDecoderTests.swift in Sources */,
+				AA111111000000000000000F /* TradeModelTests.swift in Sources */,
+				AA1111110000000000000011 /* CombineDataFlowTests.swift in Sources */,
+				AA1111110000000000000013 /* YahooFinanceAPITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA1111110000000000000009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1919BC07249EAEF000D708F4 /* StockBar */;
+			targetProxy = AA111111000000000000000A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1919BC11249EAEF100D708F4 /* Main.storyboard */ = {
@@ -347,6 +427,36 @@
 			};
 			name = Release;
 		};
+		AA1111110000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fhl43211.StockBarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StockBar.app/Contents/MacOS/StockBar";
+			};
+			name = Debug;
+		};
+		AA1111110000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fhl43211.StockBarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StockBar.app/Contents/MacOS/StockBar";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -364,6 +474,15 @@
 			buildConfigurations = (
 				1919BC19249EAEF100D708F4 /* Debug */,
 				1919BC1A249EAEF100D708F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA1111110000000000000006 /* Build configuration list for PBXNativeTarget "StockBarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA1111110000000000000007 /* Debug */,
+				AA1111110000000000000008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
