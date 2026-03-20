@@ -14,12 +14,14 @@ import Combine
 // Real-time trading info fetched from URLSession and updates RealTimeTrading,
 // then reflected on NSStatusItem.
 class DataModel: ObservableObject {
+    static let userTradesKey = "usertrades"
+
     private let decoder = JSONDecoder()
-    
+
     @Published var realTimeTrades: [RealTimeTrade]
-    
+
     init() {
-        let data = UserDefaults.standard.data(forKey: "usertrades") ?? Data()
+        let data = UserDefaults.standard.data(forKey: Self.userTradesKey) ?? Data()
         let trades = (try? decoder.decode([Trade].self, from: data)) ?? emptyTrades(size: 1)
         self.realTimeTrades = trades.map {
             RealTimeTrade(trade: $0, realTimeInfo: TradingInfo())
@@ -31,8 +33,6 @@ class RealTimeTrade: ObservableObject, Identifiable {
     let id = UUID()
     
     static let apiBaseURL = "https://query1.finance.yahoo.com/v8/finance/chart/"
-    static let emptyQueryURL = URL(string: apiBaseURL)!
-    
     @Published var trade: Trade
     @Published var realTimeInfo: TradingInfo
     
@@ -46,12 +46,9 @@ class RealTimeTrade: ObservableObject, Identifiable {
     init(trade: Trade, realTimeInfo: TradingInfo) {
         self.trade = trade
         self.realTimeInfo = realTimeInfo
-        
+
         if #available(macOS 11.0, *) {
             initCancellable()
-        } else {
-            // fallback or no-op for older versions
-            // Optionally log or handle gracefully here
         }
     }
     
@@ -69,9 +66,6 @@ class RealTimeTrade: ObservableObject, Identifiable {
         isCancelled = false
         
         cancellable = sharedPassThroughTrade
-            .merge(with: $trade
-                .debounce(for: .seconds(1), scheduler: RunLoop.main)
-                .removeDuplicates(by: { $0.name == $1.name }))
             .filter { !$0.name.isEmpty }
             .setFailureType(to: URLError.self)
             .flatMap(maxPublishers: .max(1)) { singleTrade -> AnyPublisher<YahooFinanceQuote, Never> in

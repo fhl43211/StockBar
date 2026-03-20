@@ -20,12 +20,16 @@ class PreferenceHostingController : NSHostingController<PreferenceView> {
     override func viewWillDisappear() {
         super.viewWillDisappear()
         saveNewPrefs()
+        // Refresh all symbols when preferences close, since typing no longer triggers API calls
+        data.realTimeTrades.forEach { $0.sendTradeToPublisher() }
     }
     func saveNewPrefs() {
-        let trades = data.realTimeTrades.map {
-            $0.trade
+        do {
+            let trades = data.realTimeTrades.map { $0.trade }
+            let encodedData = try JSONEncoder().encode(trades)
+            UserDefaults.standard.set(encodedData, forKey: DataModel.userTradesKey)
+        } catch {
+            print("Failed to save preferences: \(error.localizedDescription)")
         }
-        let encodedData : Data = try! JSONEncoder().encode(trades)
-        UserDefaults.standard.set( encodedData, forKey: "usertrades")
     }
 }

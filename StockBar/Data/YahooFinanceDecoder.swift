@@ -12,7 +12,7 @@ struct YahooFinanceQuote: Codable {
 
 struct Chart: Codable {
     let result: [ChartResult]?
-    let error: Error?
+    let error: ChartError?
 }
 
 struct ChartResult: Codable {
@@ -28,37 +28,12 @@ struct Meta: Codable {
     let regularMarketPrice: Double
     let chartPreviousClose: Double?
     
-    enum CodingKeys: String, CodingKey {
-        case currency, symbol, shortName, regularMarketTime, exchangeTimezoneName, regularMarketPrice, chartPreviousClose
-    }
-    
     var regularMarketPreviousClose: Double {
         return chartPreviousClose ?? 0.0
     }
-    
-    func getPrice()->String {
-        return (currency ?? "Price") + " " + String(format: "%.2f", regularMarketPrice)
-    }
-    func getChange()->String {
-        return String(format: "%+.2f",regularMarketPrice - regularMarketPreviousClose)
-    }
-    func getLongChange()->String {
-        return String(format: "%+.4f",regularMarketPrice - regularMarketPreviousClose)
-    }
-    func getChangePct()->String {
-        return String(format: "%+.4f", 100*(regularMarketPrice - regularMarketPreviousClose)/regularMarketPreviousClose)+"%"
-    }
-    func getTimeInfo()->String {
-        let date = Date(timeIntervalSince1970: TimeInterval(regularMarketTime))
-        let tradeTimeZone = TimeZone(identifier: exchangeTimezoneName)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm zzz"
-        dateFormatter.timeZone = tradeTimeZone
-        return dateFormatter.string(from: date)
-    }
 }
 
-struct Error: Codable {
+struct ChartError: Codable {
     let description: String
 }
 

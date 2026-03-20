@@ -46,6 +46,29 @@ struct Position : Codable, Equatable {
     
 }
 
+// MARK: - P&L Calculations
+
+func dailyPNLNumber(_ tradingInfo: TradingInfo, _ position: Position)->Double {
+    return (tradingInfo.currentPrice - tradingInfo.prevClosePrice)*position.unitSize
+}
+func dailyPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    let pnlString = String(format: "%+.2f", dailyPNLNumber(tradingInfo, position))
+    return "Daily PnL: " + (tradingInfo.currency ?? "") + " " + pnlString
+}
+func totalPNL(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    let pnl = (tradingInfo.currentPrice - position.positionAvgCost)*position.unitSize
+    let pnlString = String(format: "%+.2f", pnl)
+    return "Total PnL: " + (tradingInfo.currency ?? "") + " " + pnlString
+}
+func totalPositionCost(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    return "Position Cost: " + (tradingInfo.currency ?? "") + " " + String(format: "%.2f", position.unitSize*position.positionAvgCost)
+}
+func currentPositionValue(_ tradingInfo: TradingInfo, _ position: Position)->String {
+    let positionValue = tradingInfo.currentPrice*position.unitSize
+    let positionString = String(format: "%.2f", positionValue)
+    return "Market Value: " + (tradingInfo.currency ?? "") + " " + positionString
+}
+
 struct TradingInfo {
     var currentPrice : Double = .nan
     var prevClosePrice : Double = .nan
@@ -64,6 +87,7 @@ struct TradingInfo {
         return String(format: "%+.4f",currentPrice - prevClosePrice)
     }
     func getChangePct()->String {
+        guard prevClosePrice != 0 else { return "+0.0000%" }
         return String(format: "%+.4f", 100*(currentPrice - prevClosePrice)/prevClosePrice)+"%"
     }
     func getTimeInfo()->String {

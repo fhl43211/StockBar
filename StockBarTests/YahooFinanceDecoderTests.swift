@@ -138,48 +138,4 @@ final class YahooFinanceDecoderTests: XCTestCase {
         XCTAssertEqual(quote.chart?.result?[1].meta.symbol, "GOOG")
     }
 
-    // MARK: - Meta Formatting
-
-    func testMetaPriceFormat() throws {
-        let meta = try makeMeta(price: 150.25, prevClose: 148.50, currency: "USD")
-        XCTAssertEqual(meta.getPrice(), "USD 150.25")
-    }
-
-    func testMetaChangePositive() throws {
-        let meta = try makeMeta(price: 150.25, prevClose: 148.50, currency: "USD")
-        XCTAssertEqual(meta.getChange(), "+1.75")
-    }
-
-    func testMetaChangeNegative() throws {
-        let meta = try makeMeta(price: 146.50, prevClose: 148.50, currency: "USD")
-        XCTAssertEqual(meta.getChange(), "-2.00")
-    }
-
-    func testMetaChangePct() throws {
-        let meta = try makeMeta(price: 150.0, prevClose: 100.0, currency: "USD")
-        XCTAssertEqual(meta.getChangePct(), "+50.0000%")
-    }
-
-    func testMetaNilCurrencyFallback() throws {
-        let meta = try makeMeta(price: 100.0, prevClose: 99.0, currency: nil)
-        XCTAssertTrue(meta.getPrice().hasPrefix("Price"))
-    }
-
-    // MARK: - Helpers
-
-    private func makeMeta(price: Double, prevClose: Double, currency: String?) throws -> Meta {
-        var jsonDict: [String: Any] = [
-            "symbol": "TEST",
-            "shortName": "Test",
-            "regularMarketTime": 1679000000,
-            "exchangeTimezoneName": "America/New_York",
-            "regularMarketPrice": price,
-            "chartPreviousClose": prevClose
-        ]
-        if let currency = currency {
-            jsonDict["currency"] = currency
-        }
-        let data = try JSONSerialization.data(withJSONObject: jsonDict)
-        return try JSONDecoder().decode(Meta.self, from: data)
-    }
 }
