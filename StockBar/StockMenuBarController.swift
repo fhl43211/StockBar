@@ -44,10 +44,7 @@ extension StockMenuBarController {
         self.statusBar.constructMainItemMenu(items: mainMenuItems)
     }
     private func updateSymbolItemsFromUserData(realTimeTrades: [RealTimeTrade]) {
-        statusBar.removeAllSymbolItems()
-        for iter in (0..<realTimeTrades.count) {
-            statusBar.constructSymbolItem(from: realTimeTrades[iter])
-        }
+        statusBar.updateSymbolItems(from: realTimeTrades)
     }
     // Trigger the quotes update for all symbols from URLSession.
     // This happens either when manually pressing the Refresh button
