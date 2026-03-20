@@ -10,7 +10,7 @@ import Cocoa
 
 class StockStatusBar {
     private let mainStatusItem: NSStatusItem
-    private var symbolStatusItems: [StockStatusItemController] = []
+    private var symbolStatusItems: [UUID: StockStatusItemController] = [:]
 
     init() {
         mainStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -23,11 +23,18 @@ class StockStatusBar {
         }
         mainStatusItem.menu = menu
     }
-    func removeAllSymbolItems() {
-        symbolStatusItems.removeAll()
-    }
-    func constructSymbolItem(from realTimeTrade : RealTimeTrade) {
-        symbolStatusItems.append(StockStatusItemController(realTimeTrade: realTimeTrade))
+    func updateSymbolItems(from realTimeTrades: [RealTimeTrade]) {
+        let newIDs = Set(realTimeTrades.map { $0.id })
+        let oldIDs = Set(symbolStatusItems.keys)
+
+        // Remove items that no longer exist
+        for id in oldIDs.subtracting(newIDs) {
+            symbolStatusItems.removeValue(forKey: id)
+        }
+        // Add items that are new
+        for trade in realTimeTrades where !oldIDs.contains(trade.id) {
+            symbolStatusItems[trade.id] = StockStatusItemController(realTimeTrade: trade)
+        }
     }
     func mainItem() -> NSStatusItem {
         return mainStatusItem
